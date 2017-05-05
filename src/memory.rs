@@ -25,6 +25,7 @@ impl Default for Chip8Memory {
 }
 
 // This types only purpose is to print a usize formatted in hex
+// Rust wouldn't let me reimpl fmt::Debug on usize so I made a wrapper
 struct Address(usize);
 
 impl fmt::Debug for Address {
