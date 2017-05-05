@@ -34,11 +34,21 @@ impl fmt::Debug for Address {
     }
 }
 
+// Same deal. Just a wrapper over u8
+struct Value(u8);
+
+impl fmt::Debug for Value {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:#x}", self.0)
+    }
+}
+
 impl fmt::Debug for Chip8Memory {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_map().entries(self.memory_bank.iter()
                                               .enumerate()
-                                              .map(|(index, value)| (Address(index), value)))
+                                              .map(|(index, value)| (Address(index),
+                                                                     Value(*value))))
                                               .finish()
     }
 }

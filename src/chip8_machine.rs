@@ -1,8 +1,8 @@
-use display;
-use instructions;
-use keyboard;
-use registers;
-use memory;
+use super::display;
+use super::instructions;
+use super::keyboard;
+use super::registers;
+use super::memory;
 
 pub struct Chip8Machine {
     memory_bank: memory::Chip8Memory,
