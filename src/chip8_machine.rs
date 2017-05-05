@@ -2,7 +2,6 @@ use display;
 use instructions;
 use keyboard;
 use registers;
-use timers;
 use memory;
 
 pub struct Chip8Machine {
