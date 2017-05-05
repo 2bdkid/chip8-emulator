@@ -11,7 +11,15 @@ impl Chip8Memory {
         if let Some(memory_reference) = self.memory_bank.get_mut(location) {
             *memory_reference = value;
         } else {
-            panic!("Tried to access invalid memory location: {}", location);
+            panic!("Tried to write invalid memory location: {}", location);
+        }
+    }
+
+    pub fn read_value(&self, location: usize) -> u8 {
+        if let Some(memory_reference) = self.memory_bank.get(location) {
+            *memory_reference
+        } else {
+            panic!("Tried to read invalid memory location: {}", location);
         }
     }
 }

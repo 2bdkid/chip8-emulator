@@ -16,7 +16,8 @@ impl Chip8Machine {
     }
 
     pub fn run(&mut self) {
-        self.memory_bank.write_value(0x0, 69);
+        self.memory_bank.write_value(0x0, 0x45);
         println!("{:#?}", self.memory_bank);
+        println!("{:#x}", self.memory_bank.read_value(0x0));
     }
 }
