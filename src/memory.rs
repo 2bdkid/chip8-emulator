@@ -7,7 +7,7 @@ pub struct Chip8Memory {
 }
 
 impl Chip8Memory {
-    pub fn write_value(&mut self, location: usize, value: u8) {
+    pub fn write(&mut self, location: usize, value: u8) {
         if let Some(memory_reference) = self.memory_bank.get_mut(location) {
             *memory_reference = value;
         } else {
@@ -15,7 +15,7 @@ impl Chip8Memory {
         }
     }
 
-    pub fn read_value(&self, location: usize) -> u8 {
+    pub fn read(&self, location: usize) -> u8 {
         if let Some(memory_reference) = self.memory_bank.get(location) {
             *memory_reference
         } else {
