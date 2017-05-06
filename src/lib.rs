@@ -5,4 +5,3 @@ mod instructions;
 mod keyboard;
 mod registers;
 mod memory;
-mod stack;

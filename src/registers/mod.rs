@@ -1,5 +1,7 @@
 use std::fmt;
 
+mod stack;
+
 #[derive(Default)]
 pub struct Chip8Registers {
     pub v0: u8,
@@ -23,6 +25,19 @@ pub struct Chip8Registers {
     pub sound: u8,
     pub pc: u16,
     pub sp: u8,
+    stack: stack::Chip8Stack,
+}
+impl Chip8Registers {
+    pub fn push_stack(&mut self, value: u16) {
+        self.stack.push(value);
+        self.sp = self.stack.top_address();
+    }
+
+    pub fn pop_stack(&mut self) -> u16 {
+        let popped_value = self.stack.pop();
+        self.sp = self.stack.top_address();
+        popped_value
+    }
 }
 
 // wrapper around u8 to print in hexadecimal
@@ -67,6 +82,7 @@ impl fmt::Debug for Chip8Registers {
                      .entry(&"Sound", &U8Register(self.sound))
                      .entry(&"PC", &U16Register(self.pc))
                      .entry(&"SP", &U8Register(self.sp))
+                     .entry(&"Stack", &self.stack)
                      .finish()
     }
 }
