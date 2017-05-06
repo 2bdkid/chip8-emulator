@@ -1,163 +1,72 @@
-pub enum Register {
-    V0,
-    V1,
-    V2,
-    V3,
-    V4,
-    V5,
-    V6,
-    V7,
-    V8,
-    V9,
-    VA,
-    VB,
-    VC,
-    VD,
-    VE,
-    VF,
-    I,
-    Delay,
-    Sound,
-    PC,
-    SP,
-}
+use std::fmt;
 
-// TODO: impl fmt::Debug to print values in hexadecimal
-#[derive(Debug)]
+#[derive(Default)]
 pub struct Chip8Registers {
-    v0: u8,
-    v1: u8,
-    v2: u8,
-    v3: u8,
-    v4: u8,
-    v5: u8,
-    v6: u8,
-    v7: u8,
-    v8: u8,
-    v9: u8,
-    va: u8,
-    vb: u8,
-    vc: u8,
-    vd: u8,
-    ve: u8,
-    vf: u8,
-    i: u16,
-    delay: u8,
-    sound: u8,
-    pc: u16,
-    sp: u8,
-
-    // TODO: implement a basic stack wrapper
-    stack: Vec<u16>,
+    pub v0: u8,
+    pub v1: u8,
+    pub v2: u8,
+    pub v3: u8,
+    pub v4: u8,
+    pub v5: u8,
+    pub v6: u8,
+    pub v7: u8,
+    pub v8: u8,
+    pub v9: u8,
+    pub va: u8,
+    pub vb: u8,
+    pub vc: u8,
+    pub vd: u8,
+    pub ve: u8,
+    pub vf: u8,
+    pub i: u16,
+    pub delay: u8,
+    pub sound: u8,
+    pub pc: u16,
+    pub sp: u8,
 }
 
-impl Chip8Registers {
-    pub fn read_u8(&self, register: Register) -> u8 {
-        match register {
-            Register::V0 => self.v0,
-            Register::V1 => self.v1,
-            Register::V2 => self.v2,
-            Register::V3 => self.v3,
-            Register::V4 => self.v4,
-            Register::V5 => self.v5,
-            Register::V6 => self.v6,
-            Register::V7 => self.v7,
-            Register::V8 => self.v8,
-            Register::V9 => self.v9,
-            Register::VA => self.va,
-            Register::VB => self.vb,
-            Register::VC => self.vc,
-            Register::VD => self.vd,
-            Register::VE => self.ve,
-            Register::VF => self.vf,
-            Register::Delay => self.delay,
-            Register::Sound => self.sound,
-            Register::SP => self.sp,
-            _ => panic!("Tried to read 8 bits from a 16 bit register"),
-        }
-    }
+// wrapper around u8 to print in hexadecimal
+struct U8Register(u8);
 
-    pub fn write_u8(&mut self, register: Register, value: u8) {
-        match register {
-            Register::V0 => self.v0 = value,
-            Register::V1 => self.v1 = value,
-            Register::V2 => self.v2 = value,
-            Register::V3 => self.v3 = value,
-            Register::V4 => self.v4 = value,
-            Register::V5 => self.v5 = value,
-            Register::V6 => self.v6 = value,
-            Register::V7 => self.v7 = value,
-            Register::V8 => self.v8 = value,
-            Register::V9 => self.v9 = value,
-            Register::VA => self.va = value,
-            Register::VB => self.vb = value,
-            Register::VC => self.vc = value,
-            Register::VD => self.vd = value,
-            Register::VE => self.ve = value,
-            Register::VF => self.vf = value,
-            Register::Delay => self.delay = value,
-            Register::Sound => self.sound = value,
-            Register::SP => self.sp = value,
-            _ => panic!("Tried to write 8 bits to a 16 bit register"),
-        }
-    }
-
-    pub fn read_u16(&self, register: Register) -> u16 {
-        match register {
-            Register::I => self.i,
-            Register::PC => self.pc,
-            _ => panic!("Tried to read 16 bits from an 8 bit register"),
-        }
-    }
-
-    pub fn write_u16(&mut self, register: Register, value: u16) {
-        match register {
-            Register::I => self.i = value,
-            Register::PC => self.pc = value,
-            _ => panic!("Tried to write 16 bits to an 8 bit register"),
-        }
-    }
-
-    // TODO: Should push value onto stack and increase SP register
-    pub fn push_stack(&mut self, value: u16) {
-        unimplemented!();
-    }
-
-    // TODO: Should pop value on top of stack and decrease SP register
-    pub fn pop_stack(&mut self) -> u16 {
-        unimplemented!();
+impl fmt::Debug for U8Register {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:#x}", self.0)
     }
 }
 
-impl Default for Chip8Registers {
-    fn default() -> Chip8Registers {
-        Chip8Registers {
-            v0: 0,
-            v1: 0,
-            v2: 0,
-            v3: 0,
-            v4: 0,
-            v5: 0,
-            v6: 0,
-            v7: 0,
-            v8: 0,
-            v9: 0,
-            va: 0,
-            vb: 0,
-            vc: 0,
-            vd: 0,
-            ve: 0,
-            vf: 0,
+// wrapper around u16 to print in hexadecimal
+struct U16Register(u16);
 
-            i: 0,
+impl fmt::Debug for U16Register {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:#x}", self.0)
+    }
+}
 
-            delay: 0,
-            sound: 0,
-
-            pc: 0,
-            sp: 0,
-
-            stack: vec![0; 16],
-        }
+// will print the register name plus values in hexadecimal
+impl fmt::Debug for Chip8Registers {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_map().entry(&String::from("V0"), &U8Register(self.v0))
+                     .entry(&String::from("V1"), &U8Register(self.v1))
+                     .entry(&String::from("V2"), &U8Register(self.v2))
+                     .entry(&String::from("V3"), &U8Register(self.v3))
+                     .entry(&String::from("V4"), &U8Register(self.v4))
+                     .entry(&String::from("V5"), &U8Register(self.v5))
+                     .entry(&String::from("V6"), &U8Register(self.v6))
+                     .entry(&String::from("V7"), &U8Register(self.v7))
+                     .entry(&String::from("V8"), &U8Register(self.v8))
+                     .entry(&String::from("V9"), &U8Register(self.v9))
+                     .entry(&String::from("VA"), &U8Register(self.va))
+                     .entry(&String::from("VB"), &U8Register(self.vb))
+                     .entry(&String::from("VC"), &U8Register(self.vc))
+                     .entry(&String::from("VD"), &U8Register(self.vd))
+                     .entry(&String::from("VE"), &U8Register(self.ve))
+                     .entry(&String::from("VF"), &U8Register(self.vf))
+                     .entry(&String::from("I"), &U16Register(self.i))
+                     .entry(&String::from("Delay"), &U8Register(self.delay))
+                     .entry(&String::from("Sound"), &U8Register(self.sound))
+                     .entry(&String::from("PC"), &U16Register(self.pc))
+                     .entry(&String::from("SP"), &U8Register(self.sp))
+                     .finish()
     }
 }
