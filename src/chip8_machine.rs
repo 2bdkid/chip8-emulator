@@ -15,7 +15,7 @@ impl Chip8Machine {
         Chip8Machine {
             memory_bank: memory::Chip8Memory::default(),
             registers: registers::Chip8Registers::default(),
-            keyboard: keyboard::Keyboard::default(),
+            keyboard: keyboard::Chip8Keyboard::default(),
         }
     }
 
