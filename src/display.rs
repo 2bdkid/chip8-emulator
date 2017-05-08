@@ -16,6 +16,10 @@ impl Chip8Display {
         let state = self.pixels[x][y];
         self.pixels[x][y] = !state;
     }
+
+    pub fn draw() {
+        unimplemented!();
+    }
 }
 
 impl Default for Chip8Display {
@@ -29,9 +33,9 @@ impl Default for Chip8Display {
 impl fmt::Debug for Chip8Display {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut screen = String::new();
-        for i in 0..32 {
-            for j in 0..64 {
-                if self.pixels[j][i] {
+        for y in 0..32 {
+            for x in 0..64 {
+                if self.pixels[x][y] {
                     screen += "*";
                 } else {
                     screen += "-";
