@@ -4,7 +4,7 @@ const WIDTH: usize = 64;
 const HEIGHT: usize = 32;
 
 pub struct Chip8Display {
-    pixels: [[bool; HEIGHT]; WIDTH]
+    pixels: [bool; WIDTH * HEIGHT]
 }
 
 impl Chip8Display {
@@ -13,8 +13,8 @@ impl Chip8Display {
             panic!("Tried to flip pixel that was out of range: ({}, {})", x, y);
         }
 
-        let state = self.pixels[x][y];
-        self.pixels[x][y] = !state;
+        let pixel = self.pixels.chunks_mut(WIDTH).nth(y).unwrap().get_mut(x).unwrap();
+        *pixel = !*pixel;
     }
 
     pub fn draw() {
@@ -25,17 +25,19 @@ impl Chip8Display {
 impl Default for Chip8Display {
     fn default() -> Chip8Display {
         Chip8Display {
-            pixels: [[false; HEIGHT]; WIDTH]
+            pixels: [false; HEIGHT * WIDTH]
         }
     }
 }
 
+
 impl fmt::Debug for Chip8Display {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut screen = String::new();
-        for y in 0..32 {
-            for x in 0..64 {
-                if self.pixels[x][y] {
+
+        for row in self.pixels.chunks(WIDTH) {
+            for pixel in row {
+                if *pixel {
                     screen += "*";
                 } else {
                     screen += "-";
