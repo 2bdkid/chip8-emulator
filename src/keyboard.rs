@@ -18,7 +18,7 @@ pub enum Key {
 }
 
 #[derive(Default)]
-pub struct Keyboard {
+pub struct Chip8Keyboard {
     zero: bool,
     one: bool,
     two: bool,
@@ -37,7 +37,7 @@ pub struct Keyboard {
     f: bool,
 }
 
-impl Keyboard {
+impl Chip8Keyboard {
     pub fn is_pressed(&self, key: Key) -> bool {
         match key {
             Key::Zero => self.zero,
