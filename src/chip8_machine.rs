@@ -7,7 +7,7 @@ use super::memory;
 pub struct Chip8Machine {
     memory_bank: memory::Chip8Memory,
     registers: registers::Chip8Registers,
-    keyboard: keyboard::Keyboard,
+    keyboard: keyboard::Chip8Keyboard,
 }
 
 impl Chip8Machine {
