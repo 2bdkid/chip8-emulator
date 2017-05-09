@@ -3,7 +3,7 @@ use std::fmt;
 const MEMORY_SIZE: usize = 4096;
 
 pub struct Chip8Memory {
-    memory_bank: Box<[u8]>
+    memory_bank: [u8; MEMORY_SIZE]
 }
 
 impl Chip8Memory {
@@ -27,7 +27,7 @@ impl Chip8Memory {
 impl Default for Chip8Memory {
     fn default() -> Chip8Memory {
         Chip8Memory {
-            memory_bank: vec![0; MEMORY_SIZE].into_boxed_slice()
+            memory_bank: [0; MEMORY_SIZE]
         }
     }
 }
