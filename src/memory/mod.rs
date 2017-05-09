@@ -1,5 +1,7 @@
 use std::fmt;
 
+pub mod sprites;
+
 const MEMORY_SIZE: usize = 4096;
 
 pub struct Chip8Memory {
