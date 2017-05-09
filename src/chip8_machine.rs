@@ -4,6 +4,8 @@ use super::keyboard;
 use super::registers;
 use super::memory;
 
+use instructions::Instruction;
+
 pub struct Chip8Machine {
     memory_bank: memory::Chip8Memory,
     registers: registers::Chip8Registers,
@@ -22,7 +24,7 @@ impl Chip8Machine {
     }
 
     pub fn run(&mut self) {
-        self.display.flip_pixel(63, 31);
-        println!("{:?}", self.display);
+        let Instruction::SYS(address) = instructions::decode_instruction(0b0000000000000011);
+        println!("Got address of {:#x}", address);
     }
 }
