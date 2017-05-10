@@ -25,7 +25,7 @@ impl Chip8Machine {
     }
 
     pub fn run(&mut self) {
-        let op = instructions::Instruction::new(0b0000000000000011);
+        let op = Instruction::new(0b0000000000000011);
 
         match op {
             Instruction::SYS(address) => {
