@@ -2,6 +2,25 @@ use std::fmt;
 
 mod stack;
 
+pub enum GeneralRegister {
+    V0,
+    V1,
+    V2,
+    V3,
+    V4,
+    V5,
+    V6,
+    V7,
+    V8,
+    V9,
+    VA,
+    VB,
+    VC,
+    VD,
+    VE,
+    VF,
+}
+
 #[derive(Default)]
 pub struct Chip8Registers {
     pub v0: u8,
@@ -27,6 +46,7 @@ pub struct Chip8Registers {
     pub sp: u8,
     stack: stack::Chip8Stack,
 }
+
 impl Chip8Registers {
     pub fn push_stack(&mut self, value: u16) {
         self.stack.push(value);
