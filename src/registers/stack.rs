@@ -1,6 +1,6 @@
 #[derive(Debug)]
 pub struct Chip8Stack {
-    array: Box<[u16]>,
+    array: [u16; 16],
     sp: u8,
 }
 
@@ -35,7 +35,7 @@ impl Chip8Stack {
 impl Default for Chip8Stack {
     fn default() -> Chip8Stack {
         Chip8Stack {
-            array: vec![0; 16].into_boxed_slice(),
+            array: [0; 16],
             sp: 0,
         }
     }
