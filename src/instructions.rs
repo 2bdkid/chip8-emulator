@@ -17,28 +17,22 @@ impl Instruction {
                            (instruction & 0b1111) as u8);
 
         match split_bits {
-            (0x0, bits_one, bits_two, bits_three) => {
-                let address = ((((bits_one as u16) << 4) |
-                                  bits_two as u16) << 4) |
-                                  bits_three as u16;
-                Instruction::SYS(address)
-            },
             (0x0, 0x0, 0xE, 0x0) => {
                 Instruction::CLS
             },
             (0x0, 0x0, 0xE, 0xE) => {
                 Instruction::RET
             },
+            (0x0, _, _, _) => {
+                let address = instruction & 0b0000111111111111;
+                Instruction::SYS(address)
+            },
             (0x1, bits_one, bits_two, bits_three) => {
-                let address = ((((bits_one as u16) << 4) |
-                                  bits_two as u16) << 4) |
-                                  bits_three as u16;
+                let address = instruction & 0b0000111111111111;
                 Instruction::JP(address)
             },
             (0x2, bits_one, bits_two, bits_three) => {
-                let address = ((((bits_one as u16) << 4) |
-                                  bits_two as u16) << 4) |
-                                  bits_three as u16;
+                let address = instruction & 0b0000111111111111;
                 Instruction::CALL(address)
             },
             (0x3, bits_one, bits_two, bits_three) => {
@@ -62,11 +56,75 @@ impl Instruction {
                     _ => panic!("SEC instruction has invalid register: {}", bits_one),
                 };
 
-                let constant = (bits_two << 4) | bits_three;
+                let constant = (instruction & 0b0000000011111111) as u8;
                 Instruction::SEC(register, constant)
             },
             (_, _, _, _) => panic!("Invalid instruction: {:x}{:x}{:x}{:x}",
                                    split_bits.0, split_bits.1, split_bits.2, split_bits.3),
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn decode_sys() {
+        let sys = Instruction::new(0b0000_0000_0000_0011);
+        match sys {
+            Instruction::SYS(address) if address == 0x3 => assert!(true),
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_cls() {
+        let cls = Instruction::new(0b0000000011100000);
+        match cls {
+            Instruction::CLS => assert!(true),
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_ret() {
+        let ret = Instruction::new(0b0000000011101110);
+        match ret {
+            Instruction::RET => assert!(true),
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_jp() {
+        let jp = Instruction::new(0b0001000000000011);
+        match jp {
+            Instruction::JP(address) if address == 0x3 => assert!(true),
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_call() {
+        let call = Instruction::new(0b0010000000000011);
+        match call {
+            Instruction::CALL(address) if address == 0x3 => assert!(true),
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_sec() {
+        let sec = Instruction::new(0b0011000000000011);
+        match sec {
+            Instruction::SEC(register, constant) if constant == 3 => {
+                match register {
+                    GeneralRegister::V0 => assert!(true),
+                    _ => assert!(false),
+                }
+            }
+            _ => assert!(false),
         }
     }
 }
