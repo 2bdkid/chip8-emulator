@@ -2,6 +2,7 @@ use std::fmt;
 
 mod stack;
 
+#[derive(Clone, Copy)]
 pub enum GeneralRegister {
     V0,
     V1,
