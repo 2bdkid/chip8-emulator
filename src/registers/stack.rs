@@ -1,4 +1,5 @@
-#[derive(Debug)]
+use std::fmt;
+
 pub struct Chip8Stack {
     array: [u16; 16],
     sp: u8,
@@ -38,5 +39,19 @@ impl Default for Chip8Stack {
             array: [0; 16],
             sp: 0,
         }
+    }
+}
+
+struct Address(u16);
+
+impl fmt::Debug for Address {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:#x}", self.0)
+    }
+}
+
+impl fmt::Debug for Chip8Stack {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_list().entries(self.array.iter().map(|address| Address(*address))).finish()
     }
 }
