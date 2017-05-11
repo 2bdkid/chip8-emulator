@@ -46,6 +46,35 @@ impl ToInstruction for [u8; 4] {
     }
 }
 
+impl ToInstruction for [u8; 3] {
+    /// this is for creating instructions with a constant. The last u8 is the constant
+    fn to_instruction(&self) -> u16 {
+        let mut instruction = 0u16;
+
+        instruction |= (self[0] as u16) & 0b1111;
+        instruction <<= 4;
+        instruction |= (self[1] as u16) & 0b1111;
+        instruction <<= 8;
+        instruction |= (self[2] as u16) & 0b11111111;
+
+        instruction
+    }
+}
+
+impl ToInstruction for [u16; 2] {
+    /// this is for creating instructions with an address. The last u16 is the address
+    fn to_instruction(&self) -> u16 {
+        let mut instruction = 0u16;
+
+        instruction |= self[0] & 0b1111;
+        instruction <<= 12;
+        instruction |= self[1] & 0b111111111111;
+
+        instruction
+
+    }
+}
+
 impl Instruction {
     pub fn new<T: ToInstruction>(instruction: T) -> Instruction {
         let instruction = instruction.to_instruction();

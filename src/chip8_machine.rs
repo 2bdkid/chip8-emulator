@@ -111,7 +111,7 @@ impl Chip8Machine {
     }
 
     pub fn run(&mut self) {
-        let op = Instruction::new([0x1, 0x0, 0x0, 0x3]);
+        let op = Instruction::new([0x1, 0x3]);
         self.run_op(op);
         println!("{:#?}", self.registers);
     }
