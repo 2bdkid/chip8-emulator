@@ -200,7 +200,7 @@ mod tests {
 
     #[test]
     fn decode_ldc() {
-        let ldc = Instruction::new(0b011000000000011);
+        let ldc = Instruction::new(0b0110000000000011);
         match ldc {
             Instruction::LDC(register, constant) if register == GeneralRegister::V0 &&
                                                                 constant == 3 => {
