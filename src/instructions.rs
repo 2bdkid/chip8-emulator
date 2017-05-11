@@ -27,16 +27,16 @@ impl Instruction {
                 let address = instruction & 0b0000111111111111;
                 Instruction::SYS(address)
             },
-            (0x1, bits_one, bits_two, bits_three) => {
+            (0x1, _, _, _) => {
                 let address = instruction & 0b0000111111111111;
                 Instruction::JP(address)
             },
-            (0x2, bits_one, bits_two, bits_three) => {
+            (0x2, _, _, _) => {
                 let address = instruction & 0b0000111111111111;
                 Instruction::CALL(address)
             },
-            (0x3, bits_one, bits_two, bits_three) => {
-                let register = match bits_one {
+            (0x3, register_bits, _, _) => {
+                let register = match register_bits {
                     0 => GeneralRegister::V0,
                     1 => GeneralRegister::V1,
                     2 => GeneralRegister::V2,
@@ -53,7 +53,7 @@ impl Instruction {
                     13 => GeneralRegister::VD,
                     14 => GeneralRegister::VE,
                     15 => GeneralRegister::VF,
-                    _ => panic!("SEC instruction has invalid register: {}", bits_one),
+                    _ => panic!("SEC instruction has invalid register: {}", register_bits),
                 };
 
                 let constant = (instruction & 0b0000000011111111) as u8;
