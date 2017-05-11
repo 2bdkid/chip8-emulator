@@ -2,7 +2,7 @@ use std::fmt;
 
 mod stack;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq)]
 pub enum GeneralRegister {
     V0,
     V1,
@@ -20,6 +20,30 @@ pub enum GeneralRegister {
     VD,
     VE,
     VF,
+}
+
+impl GeneralRegister {
+    pub fn new(register: u8) -> GeneralRegister {
+        match register {
+            0 => GeneralRegister::V0,
+            1 => GeneralRegister::V1,
+            2 => GeneralRegister::V2,
+            3 => GeneralRegister::V3,
+            4 => GeneralRegister::V4,
+            5 => GeneralRegister::V5,
+            6 => GeneralRegister::V6,
+            7 => GeneralRegister::V7,
+            8 => GeneralRegister::V8,
+            9 => GeneralRegister::V9,
+            10 => GeneralRegister::VA,
+            11 => GeneralRegister::VB,
+            12 => GeneralRegister::VC,
+            13 => GeneralRegister::VD,
+            14 => GeneralRegister::VE,
+            15 => GeneralRegister::VF,
+            _ => panic!(format!("Cannot create GeneralRegister from index > 15. Got {}", register)),
+        }
+    }
 }
 
 #[derive(Default)]
@@ -58,6 +82,27 @@ impl Chip8Registers {
         let popped_value = self.stack.pop();
         self.sp = self.stack.top_address();
         popped_value
+    }
+
+    pub fn get_general_register_value(&self, register: GeneralRegister) -> u8 {
+        match register {
+            GeneralRegister::V0 => self.v0,
+            GeneralRegister::V1 => self.v1,
+            GeneralRegister::V2 => self.v2,
+            GeneralRegister::V3 => self.v3,
+            GeneralRegister::V4 => self.v4,
+            GeneralRegister::V5 => self.v5,
+            GeneralRegister::V6 => self.v6,
+            GeneralRegister::V7 => self.v7,
+            GeneralRegister::V8 => self.v8,
+            GeneralRegister::V9 => self.v9,
+            GeneralRegister::VA => self.va,
+            GeneralRegister::VB => self.vb,
+            GeneralRegister::VC => self.vc,
+            GeneralRegister::VD => self.vd,
+            GeneralRegister::VE => self.ve,
+            GeneralRegister::VF => self.vf,
+        }
     }
 }
 

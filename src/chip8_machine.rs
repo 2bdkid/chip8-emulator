@@ -50,87 +50,27 @@ impl Chip8Machine {
     }
 
     fn run_sec(&mut self, register: GeneralRegister, constant: u8) {
-        match register {
-            GeneralRegister::V0 => {
-                if self.registers.v0 == constant {
-                    self.registers.pc += 2;
-                }
-            },
-            GeneralRegister::V1 => {
-                if self.registers.v1 == constant {
-                    self.registers.pc += 2;
-                }
-            },
-            GeneralRegister::V2 => {
-                if self.registers.v2 == constant {
-                    self.registers.pc += 2;
-                }
-            },
-            GeneralRegister::V3 => {
-                if self.registers.v3 == constant {
-                    self.registers.pc += 2;
-                }
-            },
-            GeneralRegister::V4 => {
-                if self.registers.v4 == constant {
-                    self.registers.pc += 2;
-                }
-            },
-            GeneralRegister::V5 => {
-                if self.registers.v5 == constant {
-                    self.registers.pc += 2;
-                }
-            },
-            GeneralRegister::V6 => {
-                if self.registers.v6 == constant {
-                    self.registers.pc += 2;
-                }
-            },
-            GeneralRegister::V7 => {
-                if self.registers.v7 == constant {
-                    self.registers.pc += 2;
-                }
-            },
-            GeneralRegister::V8 => {
-                if self.registers.v8 == constant {
-                    self.registers.pc += 2;
-                }
-            },
-            GeneralRegister::V9 => {
-                if self.registers.v9 == constant {
-                    self.registers.pc += 2;
-                }
-            },
-            GeneralRegister::VA => {
-                if self.registers.va == constant {
-                    self.registers.pc += 2;
-                }
-            },
-            GeneralRegister::VB => {
-                if self.registers.vb == constant {
-                    self.registers.pc += 2;
-                }
-            },
-            GeneralRegister::VC => {
-                if self.registers.vd == constant {
-                    self.registers.pc += 2;
-                }
-            },
-            GeneralRegister::VD => {
-                if self.registers.vd == constant {
-                    self.registers.pc += 2;
-                }
-            },
-            GeneralRegister::VE => {
-                if self.registers.ve == constant {
-                    self.registers.pc += 2;
-                }
-            },
-            GeneralRegister::VF => {
-                if self.registers.vf == constant {
-                    self.registers.pc += 2;
-                }
-            },
+        let register_value = self.registers.get_general_register_value(register);
+
+        if register_value == constant {
+            self.registers.pc += 2;
+        }
+    }
+
+    fn run_snec(&mut self, register: GeneralRegister, constant: u8) {
+        let register_value = self.registers.get_general_register_value(register);
+
+        if register_value != constant {
+            self.registers.pc += 2;
+        }
+    }
+
+    fn run_ser(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+        let register_x_value = self.registers.get_general_register_value(register_x);
+        let register_y_value = self.registers.get_general_register_value(register_y);
+
+        if register_x_value == register_y_value {
+            self.registers.pc += 2;
         }
     }
 
@@ -153,6 +93,12 @@ impl Chip8Machine {
             },
             Instruction::SEC(register, constant) => {
                 self.run_sec(register, constant);
+            },
+            Instruction::SNEC(register, constant) => {
+                self.run_snec(register, constant);
+            },
+            Instruction::SER(register_x, register_y) => {
+                self.run_ser(register_x, register_y);
             },
         }
     }
