@@ -50,7 +50,7 @@ impl Chip8Machine {
     }
 
     fn run_sec(&mut self, register: GeneralRegister, constant: u8) {
-        let register_value = self.registers.get_general_register_value(register);
+        let register_value = self.registers.get(register);
 
         if register_value == constant {
             self.registers.pc += 2;
@@ -58,7 +58,7 @@ impl Chip8Machine {
     }
 
     fn run_snec(&mut self, register: GeneralRegister, constant: u8) {
-        let register_value = self.registers.get_general_register_value(register);
+        let register_value = self.registers.get(register);
 
         if register_value != constant {
             self.registers.pc += 2;
@@ -66,12 +66,16 @@ impl Chip8Machine {
     }
 
     fn run_ser(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
-        let register_x_value = self.registers.get_general_register_value(register_x);
-        let register_y_value = self.registers.get_general_register_value(register_y);
+        let register_x_value = self.registers.get(register_x);
+        let register_y_value = self.registers.get(register_y);
 
         if register_x_value == register_y_value {
             self.registers.pc += 2;
         }
+    }
+
+    fn run_ldc(&mut self, register: GeneralRegister, constant: u8) {
+        *self.registers.get_mut(register) = constant;
     }
 
     fn run_op(&mut self, op: Instruction) {
@@ -99,6 +103,9 @@ impl Chip8Machine {
             },
             Instruction::SER(register_x, register_y) => {
                 self.run_ser(register_x, register_y);
+            },
+            Instruction::LDC(register, constant) => {
+                self.run_ldc(register, constant);
             },
         }
     }

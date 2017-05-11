@@ -48,22 +48,22 @@ impl GeneralRegister {
 
 #[derive(Default)]
 pub struct Chip8Registers {
-    pub v0: u8,
-    pub v1: u8,
-    pub v2: u8,
-    pub v3: u8,
-    pub v4: u8,
-    pub v5: u8,
-    pub v6: u8,
-    pub v7: u8,
-    pub v8: u8,
-    pub v9: u8,
-    pub va: u8,
-    pub vb: u8,
-    pub vc: u8,
-    pub vd: u8,
-    pub ve: u8,
-    pub vf: u8,
+    v0: u8,
+    v1: u8,
+    v2: u8,
+    v3: u8,
+    v4: u8,
+    v5: u8,
+    v6: u8,
+    v7: u8,
+    v8: u8,
+    v9: u8,
+    va: u8,
+    vb: u8,
+    vc: u8,
+    vd: u8,
+    ve: u8,
+    vf: u8,
     pub i: u16,
     pub delay: u8,
     pub sound: u8,
@@ -84,7 +84,7 @@ impl Chip8Registers {
         popped_value
     }
 
-    pub fn get_general_register_value(&self, register: GeneralRegister) -> u8 {
+    pub fn get(&self, register: GeneralRegister) -> u8 {
         match register {
             GeneralRegister::V0 => self.v0,
             GeneralRegister::V1 => self.v1,
@@ -102,6 +102,27 @@ impl Chip8Registers {
             GeneralRegister::VD => self.vd,
             GeneralRegister::VE => self.ve,
             GeneralRegister::VF => self.vf,
+        }
+    }
+
+    pub fn get_mut(&mut self, register: GeneralRegister) -> &mut u8 {
+        match register {
+            GeneralRegister::V0 => &mut self.v0,
+            GeneralRegister::V1 => &mut self.v1,
+            GeneralRegister::V2 => &mut self.v2,
+            GeneralRegister::V3 => &mut self.v3,
+            GeneralRegister::V4 => &mut self.v4,
+            GeneralRegister::V5 => &mut self.v5,
+            GeneralRegister::V6 => &mut self.v6,
+            GeneralRegister::V7 => &mut self.v7,
+            GeneralRegister::V8 => &mut self.v8,
+            GeneralRegister::V9 => &mut self.v9,
+            GeneralRegister::VA => &mut self.va,
+            GeneralRegister::VB => &mut self.vb,
+            GeneralRegister::VC => &mut self.vc,
+            GeneralRegister::VD => &mut self.vd,
+            GeneralRegister::VE => &mut self.ve,
+            GeneralRegister::VF => &mut self.vf,
         }
     }
 }
