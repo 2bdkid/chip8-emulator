@@ -9,8 +9,28 @@ pub enum Instruction {
     SEC(GeneralRegister, u8), // this stands for Skip-Equal-Constant
 }
 
+pub trait ToInstruction {
+    fn to_instruction(&self) -> u16;
+}
+
+impl ToInstruction for u16 {
+    fn to_instruction(&self) -> u16 {
+        *self
+    }
+}
+
+impl ToInstruction for [u8; 4] {
+    fn to_instruction(&self) -> u16 {
+        (((((((self[0] as u16 & 0b1111)  << 4) |
+              (self[1] as u16 & 0b1111)) << 4) |
+              (self[2] as u16 & 0b1111)) << 4) |
+              (self[3] as u16 & 0b1111))
+    }
+}
+
 impl Instruction {
-    pub fn new(instruction: u16) -> Instruction {
+    pub fn new<T: ToInstruction>(instruction: T) -> Instruction {
+        let instruction = instruction.to_instruction();
         let split_bits = (((instruction >> 12) & 0b1111) as u8,
                           ((instruction >> 8) & 0b1111) as u8,
                           ((instruction >> 4) & 0b1111) as u8,

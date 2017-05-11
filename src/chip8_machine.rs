@@ -134,9 +134,7 @@ impl Chip8Machine {
         }
     }
 
-    pub fn run(&mut self) {
-        let op = Instruction::new(0b0000000000000011);
-
+    fn run_op(&mut self, op: Instruction) {
         match op {
             Instruction::SYS(address) => {
                 self.run_sys(address);
@@ -157,5 +155,11 @@ impl Chip8Machine {
                 self.run_sec(register, constant);
             },
         }
+    }
+
+    pub fn run(&mut self) {
+        let op = Instruction::new([0x1, 0x0, 0x0, 0x3]);
+        self.run_op(op);
+        println!("{:#?}", self.registers);
     }
 }
