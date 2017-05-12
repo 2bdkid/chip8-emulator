@@ -82,6 +82,51 @@ impl Chip8Machine {
         *self.registers.get_mut(register) += constant;
     }
 
+    fn run_ldr(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+        *self.registers.get_mut(register_x) = self.registers.get(register_y);
+    }
+
+    fn run_or(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+        *self.registers.get_mut(register_x) |= self.registers.get(register_y);
+    }
+
+    fn run_and(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+        *self.registers.get_mut(register_x) &= self.registers.get(register_y);
+    }
+
+    fn run_xor(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+        *self.registers.get_mut(register_x) ^= self.registers.get(register_y);
+    }
+
+    fn run_addr(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+        let register_x_value = self.registers.get(register_x);
+        let register_y_value = self.registers.get(register_y);
+
+        match register_x_value.overflowing_add(register_y_value) {
+            (result, false) => {
+                *self.registers.get_mut(register_x) = result;
+                *self.registers.get_mut(GeneralRegister::VF) = 0;
+            },
+            (result, true) => {
+                *self.registers.get_mut(register_x) = result;
+                *self.registers.get_mut(GeneralRegister::VF) = 1;
+            },
+        }
+    }
+
+    fn run_sub(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+        let register_x_value = self.registers.get(register_x);
+        let register_y_value = self.registers.get(register_y);
+
+        if register_x_value > register_y_value {
+            *self.registers.get_mut(GeneralRegister::VF) = 1;
+        } else {
+            *self.registers.get_mut(GeneralRegister::VF) = 0;
+        }
+
+        *self.registers.get_mut(register_x) -= register_y_value;
+    }
+
     fn run_op(&mut self, op: Instruction) {
         match op {
             Instruction::SYS(address) => {
@@ -113,7 +158,25 @@ impl Chip8Machine {
             },
             Instruction::ADDC(register, constant) => {
                 self.run_addc(register, constant);
-            }
+            },
+            Instruction::LDR(register_x, register_y) => {
+                self.run_ldr(register_x, register_y);
+            },
+            Instruction::OR(register_x, register_y) => {
+                self.run_or(register_x, register_y);
+            },
+            Instruction::AND(register_x, register_y) => {
+                self.run_and(register_x, register_y);
+            },
+            Instruction::XOR(register_x ,register_y) => {
+                self.run_xor(register_x, register_y);
+            },
+            Instruction::ADDR(register_x, register_y) => {
+                self.run_addr(register_x, register_y);
+            },
+            Instruction::SUB(register_x, register_y) => {
+                self.run_sub(register_x, register_y);
+            },
         }
     }
 
