@@ -10,6 +10,7 @@ pub enum Instruction {
     SNEC(GeneralRegister, u8), // this stands for Skip-Not-Equal-Constant
     SER(GeneralRegister, GeneralRegister), // this stands for Skip-Equal-Registers
     LDC(GeneralRegister, u8), // this stands for Load Constant
+    ADDC(GeneralRegister, u8), // this stand for Add Constant
 }
 
 pub trait ToInstruction {
@@ -134,7 +135,13 @@ impl Instruction {
                 let constant = (instruction & 0b0000000011111111) as u8;
 
                 Instruction::LDC(register, constant)
-            }
+            },
+            (0x7, register_bits, _, _) => {
+                let register = GeneralRegister::new(register_bits);
+                let constant = (instruction & 0b0000000011111111) as u8;
+
+                Instruction::ADDC(register, constant)
+            },
             // Anything else
             (_, _, _, _) => panic!("Invalid instruction: {:x}{:x}{:x}{:x}",
                                    split_bits.0, split_bits.1, split_bits.2, split_bits.3),
@@ -233,6 +240,18 @@ mod tests {
         match ldc {
             Instruction::LDC(register, constant) if register == GeneralRegister::V0 &&
                                                                 constant == 3 => {
+                assert!(true);
+            },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_addc() {
+        let addc = Instruction::new([0x7, 0x0, 0x3]);
+        match addc {
+            Instruction::ADDC(register, constant) => if constant == 3 &&
+                                                        register == GeneralRegister::V0 {
                 assert!(true);
             },
             _ => assert!(false),
