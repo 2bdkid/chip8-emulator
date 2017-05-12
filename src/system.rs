@@ -127,6 +127,16 @@ impl Chip8Machine {
         *self.registers.get_mut(register_x) -= register_y_value;
     }
 
+    fn run_shr(&mut self, register: GeneralRegister) {
+        if self.registers.get(register) & 0b1 == 1 {
+            *self.registers.get_mut(GeneralRegister::VF) = 1;
+        } else {
+            *self.registers.get_mut(GeneralRegister::VF) = 0;
+        }
+
+        *self.registers.get_mut(register) >>= 1;
+    }
+
     fn run_op(&mut self, op: Instruction) {
         match op {
             Instruction::SYS(address) => {
@@ -177,6 +187,9 @@ impl Chip8Machine {
             Instruction::SUB(register_x, register_y) => {
                 self.run_sub(register_x, register_y);
             },
+            Instruction::SHR(register) => {
+                self.run_shr(register);
+            }
         }
     }
 

@@ -17,6 +17,7 @@ pub enum Instruction {
     XOR(GeneralRegister, GeneralRegister),
     ADDR(GeneralRegister, GeneralRegister), // this stands for Add-Registers
     SUB(GeneralRegister, GeneralRegister),
+    SHR(GeneralRegister),
 }
 
 pub trait ToInstruction {
@@ -190,6 +191,11 @@ impl Instruction {
                 let register_y = GeneralRegister::new(register_y_bits);
 
                 Instruction::SUB(register_x, register_y)
+            },
+            (0x8, register_x_bits, _, 0x6) => {
+                let register_x = GeneralRegister::new(register_x_bits);
+
+                Instruction::SHR(register_x)
             },
             // Anything else
             (_, _, _, _) => panic!("Invalid instruction: {:#x}", instruction),
@@ -374,6 +380,15 @@ mod tests {
                                                            register_y == GeneralRegister::V1 {
                 assert!(true);
             },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_shr() {
+        let shr = Instruction::new([0x8, 0x1, 0x0, 0x6]);
+        match shr {
+            Instruction::SHR(register) if register == GeneralRegister::V1 => assert!(true),
             _ => assert!(false),
         }
     }
