@@ -1,6 +1,9 @@
 [package]
+
 name = "chip8_virtual_machine"
 version = "0.1.0"
 authors = ["Brady Dean <2bdkid@gmail.com>"]
 
 [dependencies]
+
+rand = "0.3.15"

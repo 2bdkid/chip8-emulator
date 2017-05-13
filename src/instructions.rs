@@ -21,6 +21,9 @@ pub enum Instruction {
     SUBN(GeneralRegister, GeneralRegister),
     SHL(GeneralRegister),
     SNE(GeneralRegister, GeneralRegister),
+    LDI(u16),                               // this stands for Load-I
+    JPA(u16),                               // this stands for Jump-Address
+    RND(GeneralRegister, u8),
 }
 
 pub trait ToInstruction {
@@ -220,6 +223,25 @@ impl Instruction {
                 let register_y = GeneralRegister::new(register_y_bits);
 
                 Instruction::SNE(register_x, register_y)
+            },
+            // LD I address
+            (0xA, _, _, _) => {
+                let address = instruction & 0b0000111111111111;
+
+                Instruction::LDI(address)
+            },
+            // JP V0 address
+            (0xB, _, _, _) => {
+                let address = instruction & 0b0000111111111111;
+
+                Instruction::JPA(address)
+            },
+            // RND Vx kk
+            (0xC, register_bits, _, _) => {
+                let register = GeneralRegister::new(register_bits);
+                let constant = (instruction & 0b0000000011111111) as u8;
+
+                Instruction::RND(register, constant)
             },
             // Anything else
             (_, _, _, _) => panic!("Invalid instruction: {:#x}", instruction),
@@ -444,6 +466,36 @@ mod tests {
         match sne {
             Instruction::SNE(register_x, register_y) if register_x == GeneralRegister::V0 &&
                                                         register_y == GeneralRegister::V1 => {
+                assert!(true);
+            },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_ldi() {
+        let ldi = Instruction::new([0xA, 0x3]);
+        match ldi {
+            Instruction::LDI(address) if address == 0x3 => assert!(true),
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_jpa() {
+        let jpa = Instruction::new([0xB, 0x3]);
+        match jpa {
+            Instruction::JPA(address) if address == 0x3 => assert!(true),
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_rnd() {
+        let rnd = Instruction::new([0xC, 0x1, 0x3]);
+        match rnd {
+            Instructions::RND(register, constant) if register == GeneralRegister::V1 &&
+                                                     constant == 0x3 => {
                 assert!(true);
             },
             _ => assert!(false),

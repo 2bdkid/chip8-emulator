@@ -1,3 +1,5 @@
+extern crate rand;
+
 pub use system::Chip8Machine;
 
 mod display;

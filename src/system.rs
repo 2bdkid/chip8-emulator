@@ -1,3 +1,5 @@
+use super::rand;
+
 use super::display;
 use super::instructions;
 use super::keyboard;
@@ -166,6 +168,18 @@ impl Chip8Machine {
         }
     }
 
+    fn run_ldi(&mut self, address: u16) {
+        self.registers.i = address;
+    }
+
+    fn run_jpa(&mut self, address: u16) {
+        self.registers.pc = self.registers.get(GeneralRegister::V0) as u16 + address;
+    }
+
+    fn run_rnd(&mut self, register: GeneralRegister, constant: u8) {
+        *self.registers.get_mut(register) = rand::random::<u8>() & constant;
+    }
+
     fn run_op(&mut self, op: Instruction) {
         match op {
             Instruction::SYS(address) => {
@@ -227,6 +241,15 @@ impl Chip8Machine {
             },
             Instruction::SNE(register_x, register_y) => {
                 self.run_sne(register_x, register_y);
+            },
+            Instruction::LDI(address) => {
+                self.run_ldi(address);
+            },
+            Instruction::JPA(address) => {
+                self.run_jpa(address);
+            },
+            Instruction::RND(register, constant) => {
+                self.run_rnd(register, constant);
             },
         }
     }
