@@ -18,6 +18,9 @@ pub enum Instruction {
     ADDR(GeneralRegister, GeneralRegister), // this stands for Add-Registers
     SUB(GeneralRegister, GeneralRegister),
     SHR(GeneralRegister),
+    SUBN(GeneralRegister, GeneralRegister),
+    SHL(GeneralRegister),
+    SNE(GeneralRegister, GeneralRegister),
 }
 
 pub trait ToInstruction {
@@ -192,10 +195,31 @@ impl Instruction {
 
                 Instruction::SUB(register_x, register_y)
             },
+            // SHR Vx
             (0x8, register_x_bits, _, 0x6) => {
                 let register_x = GeneralRegister::new(register_x_bits);
 
                 Instruction::SHR(register_x)
+            },
+            // SUBN Vx Vy
+            (0x8, register_x_bits, register_y_bits, 0x7) => {
+                let register_x = GeneralRegister::new(register_x_bits);
+                let register_y = GeneralRegister::new(register_y_bits);
+
+                Instruction::SUBN(register_x, register_y)
+            },
+            // SHL Vx
+            (0x8, register_x_bits, _, 0xE) => {
+                let register_x = GeneralRegister::new(register_x_bits);
+
+                Instruction::SHL(register_x)
+            },
+            // SNE Vx Vy
+            (0x9, register_x_bits, register_y_bits, 0x0) => {
+                let register_x = GeneralRegister::new(register_x_bits);
+                let register_y = GeneralRegister::new(register_y_bits);
+
+                Instruction::SNE(register_x, register_y)
             },
             // Anything else
             (_, _, _, _) => panic!("Invalid instruction: {:#x}", instruction),
@@ -389,6 +413,39 @@ mod tests {
         let shr = Instruction::new([0x8, 0x1, 0x0, 0x6]);
         match shr {
             Instruction::SHR(register) if register == GeneralRegister::V1 => assert!(true),
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_subn() {
+        let subn = Instruction::new([0x8, 0x0, 0x1, 0x7]);
+        match subn {
+            Instruction::SUBN(register_x, register_y) if register_x == GeneralRegister::V0 &&
+                                                         register_y == GeneralRegister::V1 => {
+                assert!(true);
+            },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_shl() {
+        let shl = Instruction::new([0x8, 0x1, 0x0, 0xE]);
+        match shl {
+            Instruction::SHL(register) if register == GeneralRegister::V1 => assert!(true),
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_sne() {
+        let sne = Instruction::new([0x9, 0x0, 0x1, 0x0]);
+        match sne {
+            Instruction::SNE(register_x, register_y) if register_x == GeneralRegister::V0 &&
+                                                        register_y == GeneralRegister::V1 => {
+                assert!(true);
+            },
             _ => assert!(false),
         }
     }
