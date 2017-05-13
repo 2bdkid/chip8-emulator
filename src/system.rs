@@ -137,6 +137,35 @@ impl Chip8Machine {
         *self.registers.get_mut(register) >>= 1;
     }
 
+    fn run_subn(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+        let register_x_value = self.registers.get(register_x);
+        let register_y_value = self.registers.get(register_y);
+
+        if register_y_value > register_x_value {
+            *self.registers.get_mut(GeneralRegister::VF) = 1;
+        } else {
+            *self.registers.get_mut(GeneralRegister::VF) = 0;
+        }
+
+        *self.registers.get_mut(register_x) = register_y_value - register_x_value;
+    }
+
+    fn run_shl(&mut self, register: GeneralRegister) {
+        if self.registers.get(register) & 0b10000000 == 1 {
+            *self.registers.get_mut(GeneralRegister::VF) = 1;
+        } else {
+            *self.registers.get_mut(GeneralRegister::VF) = 0;
+        }
+
+        *self.registers.get_mut(register) <<= 1;
+    }
+
+    fn run_sne(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+        if self.registers.get(register_x) != self.registers.get(register_y) {
+            self.registers.pc += 2;
+        }
+    }
+
     fn run_op(&mut self, op: Instruction) {
         match op {
             Instruction::SYS(address) => {
@@ -189,7 +218,16 @@ impl Chip8Machine {
             },
             Instruction::SHR(register) => {
                 self.run_shr(register);
-            }
+            },
+            Instruction::SUBN(register_x, register_y) => {
+                self.run_subn(register_x, register_y);
+            },
+            Instruction::SHL(register) => {
+                self.run_shl(register);
+            },
+            Instruction::SNE(register_x, register_y) => {
+                self.run_sne(register_x, register_y);
+            },
         }
     }
 
