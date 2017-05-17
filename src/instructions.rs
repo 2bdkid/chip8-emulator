@@ -28,6 +28,8 @@ pub enum Instruction {
     SKP(GeneralRegister),
     SKNP(GeneralRegister),
     LDRD(GeneralRegister),                  // this stands for Load-Register-Delay
+    LDVK(GeneralRegister),                  // this stands for Load-Register-Key
+    LDDV(GeneralRegister),                  // this stands for Load-Delay-Register
 }
 
 pub trait ToInstruction {
@@ -271,6 +273,18 @@ impl Instruction {
                 let register = GeneralRegister::new(register_bits);
 
                 Instruction::LDRD(register)
+            },
+            // LD Vx K
+            (0xF, register_bits, 0x0, 0xA) => {
+                let register = GeneralRegister::new(register_bits);
+
+                Instruction::LDVK(register)
+            },
+            // LD DT Vx
+            (0xF, register_bits, 0x1, 0x5) => {
+                let register = GeneralRegister::new(register_bits);
+
+                Instruction::LDDV(register)
             },
             // Anything else
             (_, _, _, _) => panic!("Invalid instruction: {:#x}", instruction),
@@ -571,6 +585,28 @@ mod tests {
         let ldrd = Instruction::new([0xF, 0x1, 0x0, 0x7]);
         match ldrd {
             Instruction::LDRD(register) if register == GeneralRegister::V1 => {
+                assert!(true);
+            },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_ldvk() {
+        let ldvk = Instruction::new([0xF, 0x1, 0x0, 0xA]);
+        match ldvk {
+            Instruction::LDVK(register) if register == GeneralRegister::V1 => {
+                assert!(true);
+            },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_lddr() {
+        let lddr = Instruction::new([0xF, 0x1, 0x1, 0x5]);
+        match lddr {
+            Instruction::LDDR(register) if register == GeneralRegister::V1 => {
                 assert!(true);
             },
             _ => assert!(false),

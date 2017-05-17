@@ -205,6 +205,14 @@ impl Chip8Machine {
         *self.registers.get_mut(register) = self.registers.delay;
     }
 
+    fn run_ldvk(&mut self, register: GeneralRegister) {
+        unimplemented!();
+    }
+
+    fn run_lddr(&mut self, register: GeneralRegister) {
+        self.registers.delay = self.registers.get(register);
+    }
+
     fn run_op(&mut self, op: Instruction) {
         match op {
             Instruction::SYS(address) => {
@@ -287,6 +295,12 @@ impl Chip8Machine {
             },
             Instruction::LDRD(register) => {
                 self.run_ldrd(register);
+            },
+            Instruction::LDVK(register) => {
+                self.run_ldvk(register);
+            },
+            Instruction::LDDR(register) => {
+                self.run_lddr(register);
             },
         }
     }
