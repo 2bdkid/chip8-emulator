@@ -1,3 +1,4 @@
+#[derive(Clone, Copy)]
 pub enum Key {
     Zero,
     One,
@@ -15,6 +16,40 @@ pub enum Key {
     D,
     E,
     F,
+}
+
+pub trait toKey {
+    fn to_key(&self) -> Key;
+}
+
+impl toKey for Key {
+    fn to_key(&self) -> Key {
+        *self
+    }
+}
+
+impl toKey for u8 {
+    fn to_key(&self) -> Key {
+        match *self {
+            0 => Key::Zero,
+            1 => Key::One,
+            2 => Key::Two,
+            3 => Key::Three,
+            4 => Key::Four,
+            5 => Key::Five,
+            6 => Key::Six,
+            7 => Key::Seven,
+            8 => Key::Eight,
+            9 => Key::Nine,
+            10 => Key::A,
+            11 => Key::B,
+            12 => Key::C,
+            13 => Key::D,
+            14 => Key::E,
+            15 => Key::F,
+            key @ _ => panic!(format!("Tried to create invalid key from {}", key)),
+        }
+    }
 }
 
 #[derive(Default)]
@@ -38,7 +73,9 @@ pub struct Chip8Keyboard {
 }
 
 impl Chip8Keyboard {
-    pub fn is_pressed(&self, key: Key) -> bool {
+    pub fn is_pressed<T: toKey>(&self, key: T) -> bool {
+        let key = key.to_key();
+
         match key {
             Key::Zero => self.zero,
             Key::One => self.one,

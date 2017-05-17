@@ -24,6 +24,10 @@ pub enum Instruction {
     LDI(u16),                               // this stands for Load-I
     JPA(u16),                               // this stands for Jump-Address
     RND(GeneralRegister, u8),
+    DRW(GeneralRegister, GeneralRegister, u8),
+    SKP(GeneralRegister),
+    SKNP(GeneralRegister),
+    LDRD(GeneralRegister),                  // this stands for Load-Register-Delay
 }
 
 pub trait ToInstruction {
@@ -242,6 +246,31 @@ impl Instruction {
                 let constant = (instruction & 0b0000000011111111) as u8;
 
                 Instruction::RND(register, constant)
+            },
+            // DRW Vx Vy nibble
+            (0xD, register_x_bits, register_y_bits, bytes) => {
+                let register_x = GeneralRegister::new(register_x_bits);
+                let register_y = GeneralRegister::new(register_y_bits);
+
+                Instruction::DRW(register_x, register_y, bytes)
+            },
+            // SKP Vx
+            (0xE, register_bits, 0x9, 0xE) => {
+                let register = GeneralRegister::new(register_bits);
+
+                Instruction::SKP(register)
+            },
+            // SKNP Vx
+            (0xE, register_bits, 0xA, 0x1) => {
+                let register = GeneralRegister::new(register_bits);
+
+                Instruction::SKNP(register)
+            },
+            // LD Vx DT
+            (0xF, register_bits, 0x0, 0x7) => {
+                let register = GeneralRegister::new(register_bits);
+
+                Instruction::LDRD(register)
             },
             // Anything else
             (_, _, _, _) => panic!("Invalid instruction: {:#x}", instruction),
@@ -494,8 +523,54 @@ mod tests {
     fn decode_rnd() {
         let rnd = Instruction::new([0xC, 0x1, 0x3]);
         match rnd {
-            Instructions::RND(register, constant) if register == GeneralRegister::V1 &&
+            Instruction::RND(register, constant) if register == GeneralRegister::V1 &&
                                                      constant == 0x3 => {
+                assert!(true);
+            },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_drw() {
+        let drw = Instruction::new([0xD, 0x1, 0x2, 0x4]);
+        match drw {
+            Instruction::DRW(register_x, register_y, bytes) if register_x == GeneralRegister::V1 &&
+                                                               register_y == GeneralRegister::V2 &&
+                                                               bytes == 4 => {
+                assert!(true);
+            },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_skp() {
+        let skp = Instruction::new([0xE, 0x1, 0x9, 0xE]);
+        match skp {
+            Instruction::SKP(register) if register == GeneralRegister::V1 => {
+                assert!(true);
+            },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_sknp() {
+        let sknp = Instruction::new([0xE, 0x1, 0xA, 0x1]);
+        match sknp {
+            Instruction::SKNP(register) if register == GeneralRegister::V1 => {
+                assert!(true);
+            },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_ldrd() {
+        let ldrd = Instruction::new([0xF, 0x1, 0x0, 0x7]);
+        match ldrd {
+            Instruction::LDRD(register) if register == GeneralRegister::V1 => {
                 assert!(true);
             },
             _ => assert!(false),

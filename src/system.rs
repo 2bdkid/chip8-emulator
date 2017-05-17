@@ -180,6 +180,31 @@ impl Chip8Machine {
         *self.registers.get_mut(register) = rand::random::<u8>() & constant;
     }
 
+    fn run_drw(&mut self, register_x: GeneralRegister, register_y: GeneralRegister, bytes: u8) {
+        // dear god
+        unimplemented!();
+    }
+
+    fn run_skp(&mut self, register: GeneralRegister) {
+        let register_value = self.registers.get(register);
+
+        if self.keyboard.is_pressed(register_value) {
+            self.registers.pc += 2;
+        }
+    }
+
+    fn run_sknp(&mut self, register: GeneralRegister) {
+        let register_value = self.registers.get(register);
+
+        if !self.keyboard.is_pressed(register_value) {
+            self.registers.pc += 2;
+        }
+    }
+
+    fn run_ldrd(&mut self, register: GeneralRegister) {
+        *self.registers.get_mut(register) = self.registers.delay;
+    }
+
     fn run_op(&mut self, op: Instruction) {
         match op {
             Instruction::SYS(address) => {
@@ -250,6 +275,18 @@ impl Chip8Machine {
             },
             Instruction::RND(register, constant) => {
                 self.run_rnd(register, constant);
+            },
+            Instruction::DRW(register_x, register_y, bytes) => {
+                self.run_drw(register_x, register_y, bytes);
+            },
+            Instruction::SKP(register) => {
+                self.run_skp(register);
+            },
+            Instruction::SKNP(register) => {
+                self.run_sknp(register);
+            },
+            Instruction::LDRD(register) => {
+                self.run_ldrd(register);
             },
         }
     }
