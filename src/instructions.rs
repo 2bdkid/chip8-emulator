@@ -29,7 +29,11 @@ pub enum Instruction {
     SKNP(GeneralRegister),
     LDRD(GeneralRegister),                  // this stands for Load-Register-Delay
     LDVK(GeneralRegister),                  // this stands for Load-Register-Key
-    LDDV(GeneralRegister),                  // this stands for Load-Delay-Register
+    LDDR(GeneralRegister),                  // this stands for Load-Delay-Register
+    LDSR(GeneralRegister),                  // this stands for Load-Sound-Register
+    ADDI(GeneralRegister),
+    LDIR(GeneralRegister),                  // this stands for Load-I-Register
+    LDBR(GeneralRegister),                  // this stands for Load-B-Register
 }
 
 pub trait ToInstruction {
@@ -284,7 +288,31 @@ impl Instruction {
             (0xF, register_bits, 0x1, 0x5) => {
                 let register = GeneralRegister::new(register_bits);
 
-                Instruction::LDDV(register)
+                Instruction::LDDR(register)
+            },
+            // LD ST Vx
+            (0xF, register_bits, 0x1, 0x8) => {
+                let register = GeneralRegister::new(register_bits);
+
+                Instruction::LDSR(register)
+            },
+            // ADD I Vx
+            (0xF, register_bits, 0x1, 0xE) => {
+                let register = GeneralRegister::new(register_bits);
+
+                Instruction::ADDI(register)
+            },
+            // LD F Vx
+            (0xF, register_bits, 0x2, 0x9) => {
+                let register = GeneralRegister::new(register_bits);
+
+                Instruction::LDIR(register)
+            },
+            // LD B Vx
+            (0xF, register_bits, 0x3, 0x3) => {
+                let register = GeneralRegister::new(register_bits);
+
+                Instruction::LDBR(register)
             },
             // Anything else
             (_, _, _, _) => panic!("Invalid instruction: {:#x}", instruction),
@@ -607,6 +635,50 @@ mod tests {
         let lddr = Instruction::new([0xF, 0x1, 0x1, 0x5]);
         match lddr {
             Instruction::LDDR(register) if register == GeneralRegister::V1 => {
+                assert!(true);
+            },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_ldsr() {
+        let ldsr = Instruction::new([0xF, 0x1, 0x1, 0x8]);
+        match ldsr {
+            Instruction::LDSR(register) if register == GeneralRegister::V1 => {
+                assert!(true);
+            },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_addi() {
+        let addi = Instruction::new([0xF, 0x1, 0x1, 0xE]);
+        match addi {
+            Instruction::ADDI(register) if register == GeneralRegister::V1 => {
+                assert!(true);
+            },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_ldir() {
+        let ldir = Instruction::new([0xF, 0x1, 0x2, 0x9]);
+        match ldir {
+            Instruction::LDIR(register) if register == GeneralRegister::V1 => {
+                assert!(true);
+            },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_ldbr() {
+        let ldbr = Instruction::new([0xF, 0x1, 0x3, 0x3]);
+        match ldir {
+            Instruction::LDBR(register) if register == GeneralRegister::V1 => {
                 assert!(true);
             },
             _ => assert!(false),

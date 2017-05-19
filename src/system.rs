@@ -213,6 +213,31 @@ impl Chip8Machine {
         self.registers.delay = self.registers.get(register);
     }
 
+    fn run_ldsr(&mut self, register: GeneralRegister) {
+        self.registers.sound = self.registers.get(register);
+    }
+
+    fn run_addi(&mut self, register: GeneralRegister) {
+        self.registers.i += self.registers.get(register) as u16;
+    }
+
+    fn run_ldir(&mut self, register: GeneralRegister) {
+        unimplemented!();
+    }
+
+    fn run_ldbr(&mut self, register: GeneralRegister) {
+        let register_value = self.registers.get(register);
+        let i_value = self.registers.i;
+
+        let ones = register_value % 10;
+        let tens = (register_value / 10) % 10;
+        let hundreds = (register_value / 100) % 10;
+
+        self.memory_bank.write(i_value as usize, hundreds);
+        self.memory_bank.write((i_value + 1) as usize, tens);
+        self.memory_bank.write((i_value + 2) as usize, ones);
+    }
+
     fn run_op(&mut self, op: Instruction) {
         match op {
             Instruction::SYS(address) => {
@@ -301,6 +326,18 @@ impl Chip8Machine {
             },
             Instruction::LDDR(register) => {
                 self.run_lddr(register);
+            },
+            Instruction::LDSR(register) => {
+                self.run_ldsr(register);
+            },
+            Instruction::ADDI(register) => {
+                self.run_addi(register);
+            },
+            Instruction::LDIR(register) => {
+                self.run_ldir(register);
+            },
+            Instruction::LDBR(register) => {
+                self.run_ldbr(register);
             },
         }
     }
