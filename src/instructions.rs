@@ -8,21 +8,21 @@ pub enum Instruction {
     CALL(u16),
     SEC(Register, u8),               // this stands for Skip-Equal-Constant
     SNEC(Register, u8),              // this stands for Skip-Not-Equal-Constant
-    SER(Register, Register),  // this stands for Skip-Equal-Registers
+    SER(Register, Register),         // this stands for Skip-Equal-Registers
     LDC(Register, u8),               // this stands for Load-Constant
     ADDC(Register, u8),              // this stand for Add-Constant
-    LDR(Register, Register),  // this stands for Load-Register
+    LDR(Register, Register),         // this stands for Load-Register
     OR(Register, Register),
     AND(Register, Register),
     XOR(Register, Register),
-    ADDR(Register, Register), // this stands for Add-Registers
+    ADDR(Register, Register),        // this stands for Add-Registers
     SUB(Register, Register),
     SHR(Register),
     SUBN(Register, Register),
     SHL(Register),
     SNE(Register, Register),
-    LDI(u16),                               // this stands for Load-I
-    JPA(u16),                               // this stands for Jump-Address
+    LDI(u16),                        // this stands for Load-I
+    JPA(u16),                        // this stands for Jump-Address
     RND(Register, u8),
     DRW(Register, Register, u8),
     SKP(Register),
