@@ -6,9 +6,12 @@ use super::keyboard;
 use super::registers;
 use super::memory;
 use super::stack;
+use super::sprites;
 
 use instructions::Instruction;
 use registers::Register;
+use keyboard::Key;
+use sprites::ASCIISprite;
 
 pub struct Chip8Machine {
     memory_bank: memory::Chip8Memory,
@@ -33,22 +36,23 @@ impl Chip8Machine {
         self.registers.pc = address;
     }
 
-    fn run_cls(&self) {
-        // clear the display
-        unimplemented!();
+    fn run_cls(&mut self) {
+        self.display.clear();
     }
 
-    fn run_ret(&self) {
-        // pc = top of stack. sp -= 1.
-        unimplemented!();
+    fn run_ret(&mut self) {
+        self.registers.pc = self.stack.pop();
+        self.registers.sp -= 1;
     }
 
     fn run_jp(&mut self, address: u16) {
         self.registers.pc = address;
     }
 
-    fn run_call(&self, address: u16) {
-        unimplemented!();
+    fn run_call(&mut self, address: u16) {
+        self.registers.sp += 1;
+        self.stack.push(self.registers.pc);
+        self.registers.pc = address;
     }
 
     fn run_sec(&mut self, register: Register, constant: u8) {
@@ -213,7 +217,26 @@ impl Chip8Machine {
     }
 
     fn run_ldvk(&mut self, register: Register) {
-        unimplemented!();
+        let key = keyboard::Chip8Keyboard::get_key();
+
+        match key {
+            Key::Zero => *self.registers.get_mut(register) = 0,
+            Key::One => *self.registers.get_mut(register) = 1,
+            Key::Two => *self.registers.get_mut(register) = 2,
+            Key::Three => *self.registers.get_mut(register) = 3,
+            Key::Four => *self.registers.get_mut(register) = 4,
+            Key::Five => *self.registers.get_mut(register) = 5,
+            Key::Six => *self.registers.get_mut(register) = 6,
+            Key::Seven => *self.registers.get_mut(register) = 7,
+            Key::Eight => *self.registers.get_mut(register) = 8,
+            Key::Nine => *self.registers.get_mut(register) = 9,
+            Key::A => *self.registers.get_mut(register) = 10,
+            Key::B => *self.registers.get_mut(register) = 11,
+            Key::C => *self.registers.get_mut(register) = 12,
+            Key::D => *self.registers.get_mut(register) = 13,
+            Key::E => *self.registers.get_mut(register) = 14,
+            Key::F => *self.registers.get_mut(register) = 15,
+        }
     }
 
     fn run_lddr(&mut self, register: Register) {
@@ -229,7 +252,8 @@ impl Chip8Machine {
     }
 
     fn run_ldir(&mut self, register: Register) {
-        unimplemented!();
+        let register_value = self.registers.get(register);
+        self.registers.i = sprites::get_location(ASCIISprite::new(register_value)) as u16;
     }
 
     fn run_ldbr(&mut self, register: Register) {
@@ -528,8 +552,7 @@ impl Chip8Machine {
     }
 
     pub fn run(&mut self) {
-        let op = Instruction::new([0x6, 0x2, 0x5]);
-        self.run_op(&op);
-        println!("{:#?}", self.registers);
+        
+        println!("{:#?}", self.stack);
     }
 }

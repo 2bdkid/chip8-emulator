@@ -100,4 +100,8 @@ impl Chip8Keyboard {
     pub fn poll(&mut self) {
         unimplemented!();
     }
+
+    pub fn get_key() -> Key {
+        unimplemented!();
+    }
 }

@@ -20,6 +20,10 @@ impl Chip8Display {
     pub fn draw() {
         unimplemented!();
     }
+
+    pub fn clear(&mut self) {
+        self.pixels = [false; HEIGHT * WIDTH];
+    }
 }
 
 impl Default for Chip8Display {
