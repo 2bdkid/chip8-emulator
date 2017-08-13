@@ -217,7 +217,7 @@ impl Chip8Machine {
     }
 
     fn run_ldvk(&mut self, register: Register) {
-        let key = keyboard::Chip8Keyboard::get_key();
+        let key = keyboard::get_key();
 
         match key {
             Key::Zero => *self.registers.get_mut(register) = 0,
@@ -552,7 +552,6 @@ impl Chip8Machine {
     }
 
     pub fn run(&mut self) {
-        
-        println!("{:#?}", self.stack);
+        println!("{:#?}", self.memory_bank);
     }
 }
