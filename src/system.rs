@@ -5,15 +5,17 @@ use super::instructions;
 use super::keyboard;
 use super::registers;
 use super::memory;
+use super::stack;
 
 use instructions::Instruction;
-use registers::GeneralRegister;
+use registers::Register;
 
 pub struct Chip8Machine {
     memory_bank: memory::Chip8Memory,
     registers: registers::Chip8Registers,
     keyboard: keyboard::Chip8Keyboard,
     display: display::Chip8Display,
+    stack: stack::Chip8Stack,
 }
 
 impl Chip8Machine {
@@ -23,6 +25,7 @@ impl Chip8Machine {
             registers: registers::Chip8Registers::default(),
             keyboard: keyboard::Chip8Keyboard::default(),
             display: display::Chip8Display::default(),
+            stack: stack::Chip8Stack::default(),
         }
     }
 
@@ -35,23 +38,20 @@ impl Chip8Machine {
         unimplemented!();
     }
 
-    fn run_ret(&mut self) {
-        self.registers.pc = self.registers.pop_stack();
-        self.registers.sp -= 1;
+    fn run_ret(&self) {
+        // pc = top of stack. sp -= 1.
+        unimplemented!();
     }
 
     fn run_jp(&mut self, address: u16) {
         self.registers.pc = address;
     }
 
-    fn run_call(&mut self, address: u16) {
-        self.registers.sp += 1;
-        let pc = self.registers.pc;
-        self.registers.push_stack(pc);
-        self.registers.pc = address;
+    fn run_call(&self, address: u16) {
+        unimplemented!();
     }
 
-    fn run_sec(&mut self, register: GeneralRegister, constant: u8) {
+    fn run_sec(&mut self, register: Register, constant: u8) {
         let register_value = self.registers.get(register);
 
         if register_value == constant {
@@ -59,7 +59,7 @@ impl Chip8Machine {
         }
     }
 
-    fn run_snec(&mut self, register: GeneralRegister, constant: u8) {
+    fn run_snec(&mut self, register: Register, constant: u8) {
         let register_value = self.registers.get(register);
 
         if register_value != constant {
@@ -67,7 +67,7 @@ impl Chip8Machine {
         }
     }
 
-    fn run_ser(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+    fn run_ser(&mut self, register_x: Register, register_y: Register) {
         let register_x_value = self.registers.get(register_x);
         let register_y_value = self.registers.get(register_y);
 
@@ -76,94 +76,101 @@ impl Chip8Machine {
         }
     }
 
-    fn run_ldc(&mut self, register: GeneralRegister, constant: u8) {
+    fn run_ldc(&mut self, register: Register, constant: u8) {
         *self.registers.get_mut(register) = constant;
     }
 
-    fn run_addc(&mut self, register: GeneralRegister, constant: u8) {
+    fn run_addc(&mut self, register: Register, constant: u8) {
         *self.registers.get_mut(register) += constant;
     }
 
-    fn run_ldr(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+    fn run_ldr(&mut self, register_x: Register, register_y: Register) {
         *self.registers.get_mut(register_x) = self.registers.get(register_y);
     }
 
-    fn run_or(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+    fn run_or(&mut self, register_x: Register, register_y: Register) {
         *self.registers.get_mut(register_x) |= self.registers.get(register_y);
     }
 
-    fn run_and(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+    fn run_and(&mut self, register_x: Register, register_y: Register) {
         *self.registers.get_mut(register_x) &= self.registers.get(register_y);
     }
 
-    fn run_xor(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+    fn run_xor(&mut self, register_x: Register, register_y: Register) {
         *self.registers.get_mut(register_x) ^= self.registers.get(register_y);
     }
 
-    fn run_addr(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+    fn run_addr(&mut self, register_x: Register, register_y: Register) {
         let register_x_value = self.registers.get(register_x);
         let register_y_value = self.registers.get(register_y);
 
         match register_x_value.overflowing_add(register_y_value) {
             (result, false) => {
                 *self.registers.get_mut(register_x) = result;
-                *self.registers.get_mut(GeneralRegister::VF) = 0;
+                *self.registers.get_mut(Register::VF) = 0;
             },
             (result, true) => {
                 *self.registers.get_mut(register_x) = result;
-                *self.registers.get_mut(GeneralRegister::VF) = 1;
+                *self.registers.get_mut(Register::VF) = 1;
             },
         }
     }
 
-    fn run_sub(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+    fn run_sub(&mut self, register_x: Register, register_y: Register) {
         let register_x_value = self.registers.get(register_x);
         let register_y_value = self.registers.get(register_y);
 
         if register_x_value > register_y_value {
-            *self.registers.get_mut(GeneralRegister::VF) = 1;
+            *self.registers.get_mut(Register::VF) = 1;
         } else {
-            *self.registers.get_mut(GeneralRegister::VF) = 0;
+            *self.registers.get_mut(Register::VF) = 0;
         }
 
         *self.registers.get_mut(register_x) -= register_y_value;
     }
 
-    fn run_shr(&mut self, register: GeneralRegister) {
-        if self.registers.get(register) & 0b1 == 1 {
-            *self.registers.get_mut(GeneralRegister::VF) = 1;
+    fn run_shr(&mut self, register: Register) {
+        let register_value = self.registers.get(register);
+
+        if register_value & 0b1 == 1 {
+            *self.registers.get_mut(Register::VF) = 1;
         } else {
-            *self.registers.get_mut(GeneralRegister::VF) = 0;
+            *self.registers.get_mut(Register::VF) = 0;
         }
 
         *self.registers.get_mut(register) >>= 1;
     }
 
-    fn run_subn(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
+    fn run_subn(&mut self, register_x: Register, register_y: Register) {
         let register_x_value = self.registers.get(register_x);
         let register_y_value = self.registers.get(register_y);
 
         if register_y_value > register_x_value {
-            *self.registers.get_mut(GeneralRegister::VF) = 1;
+            *self.registers.get_mut(Register::VF) = 1;
         } else {
-            *self.registers.get_mut(GeneralRegister::VF) = 0;
+            *self.registers.get_mut(Register::VF) = 0;
         }
-
+        
         *self.registers.get_mut(register_x) = register_y_value - register_x_value;
     }
 
-    fn run_shl(&mut self, register: GeneralRegister) {
-        if self.registers.get(register) & 0b10000000 == 1 {
-            *self.registers.get_mut(GeneralRegister::VF) = 1;
+    fn run_shl(&mut self, register: Register) {
+        let register_value = self.registers.get(register);
+
+        if register_value & 0b10000000 == 1 {
+            *self.registers.get_mut(Register::VF) = 1;
         } else {
-            *self.registers.get_mut(GeneralRegister::VF) = 0;
+            *self.registers.get_mut(Register::VF) = 0;
         }
 
         *self.registers.get_mut(register) <<= 1;
     }
 
-    fn run_sne(&mut self, register_x: GeneralRegister, register_y: GeneralRegister) {
-        if self.registers.get(register_x) != self.registers.get(register_y) {
+    fn run_sne(&mut self, register_x: Register, register_y: Register) {
+        let register_x_value = self.registers.get(register_x);
+        let register_y_value = self.registers.get(register_y);
+
+        if register_x_value != register_y_value {
             self.registers.pc += 2;
         }
     }
@@ -173,19 +180,19 @@ impl Chip8Machine {
     }
 
     fn run_jpa(&mut self, address: u16) {
-        self.registers.pc = self.registers.get(GeneralRegister::V0) as u16 + address;
+        self.registers.pc = self.registers.get(Register::V0) as u16 + address;
     }
 
-    fn run_rnd(&mut self, register: GeneralRegister, constant: u8) {
+    fn run_rnd(&mut self, register: Register, constant: u8) {
         *self.registers.get_mut(register) = rand::random::<u8>() & constant;
     }
 
-    fn run_drw(&mut self, register_x: GeneralRegister, register_y: GeneralRegister, bytes: u8) {
+    fn run_drw(&mut self, register_x: Register, register_y: Register, bytes: u8) {
         // dear god
         unimplemented!();
     }
 
-    fn run_skp(&mut self, register: GeneralRegister) {
+    fn run_skp(&mut self, register: Register) {
         let register_value = self.registers.get(register);
 
         if self.keyboard.is_pressed(register_value) {
@@ -193,7 +200,7 @@ impl Chip8Machine {
         }
     }
 
-    fn run_sknp(&mut self, register: GeneralRegister) {
+    fn run_sknp(&mut self, register: Register) {
         let register_value = self.registers.get(register);
 
         if !self.keyboard.is_pressed(register_value) {
@@ -201,31 +208,31 @@ impl Chip8Machine {
         }
     }
 
-    fn run_ldrd(&mut self, register: GeneralRegister) {
+    fn run_ldrd(&mut self, register: Register) {
         *self.registers.get_mut(register) = self.registers.delay;
     }
 
-    fn run_ldvk(&mut self, register: GeneralRegister) {
+    fn run_ldvk(&mut self, register: Register) {
         unimplemented!();
     }
 
-    fn run_lddr(&mut self, register: GeneralRegister) {
+    fn run_lddr(&mut self, register: Register) {
         self.registers.delay = self.registers.get(register);
     }
 
-    fn run_ldsr(&mut self, register: GeneralRegister) {
+    fn run_ldsr(&mut self, register: Register) {
         self.registers.sound = self.registers.get(register);
     }
 
-    fn run_addi(&mut self, register: GeneralRegister) {
-        self.registers.i += self.registers.get(register) as u16;
+    fn run_addi(&mut self, register: Register) {
+        self.registers.i = self.registers.get(register) as u16;
     }
 
-    fn run_ldir(&mut self, register: GeneralRegister) {
+    fn run_ldir(&mut self, register: Register) {
         unimplemented!();
     }
 
-    fn run_ldbr(&mut self, register: GeneralRegister) {
+    fn run_ldbr(&mut self, register: Register) {
         let register_value = self.registers.get(register);
         let i_value = self.registers.i;
 
@@ -238,8 +245,8 @@ impl Chip8Machine {
         self.memory_bank.write((i_value + 2) as usize, ones);
     }
 
-    fn run_op(&mut self, op: Instruction) {
-        match op {
+    fn run_op(&mut self, op: &Instruction) {
+        match *op {
             Instruction::SYS(address) => {
                 self.run_sys(address);
             },
@@ -344,7 +351,7 @@ impl Chip8Machine {
 
     pub fn run(&mut self) {
         let op = Instruction::new([0x1, 0x3]);
-        self.run_op(op);
+        self.run_op(&op);
         println!("{:#?}", self.registers);
     }
 }

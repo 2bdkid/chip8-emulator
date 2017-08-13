@@ -1,4 +1,4 @@
-use super::registers::GeneralRegister;
+use super::registers::Register;
 
 pub enum Instruction {
     SYS(u16),
@@ -6,34 +6,34 @@ pub enum Instruction {
     RET,
     JP(u16),
     CALL(u16),
-    SEC(GeneralRegister, u8),               // this stands for Skip-Equal-Constant
-    SNEC(GeneralRegister, u8),              // this stands for Skip-Not-Equal-Constant
-    SER(GeneralRegister, GeneralRegister),  // this stands for Skip-Equal-Registers
-    LDC(GeneralRegister, u8),               // this stands for Load-Constant
-    ADDC(GeneralRegister, u8),              // this stand for Add-Constant
-    LDR(GeneralRegister, GeneralRegister),  // this stands for Load-Register
-    OR(GeneralRegister, GeneralRegister),
-    AND(GeneralRegister, GeneralRegister),
-    XOR(GeneralRegister, GeneralRegister),
-    ADDR(GeneralRegister, GeneralRegister), // this stands for Add-Registers
-    SUB(GeneralRegister, GeneralRegister),
-    SHR(GeneralRegister),
-    SUBN(GeneralRegister, GeneralRegister),
-    SHL(GeneralRegister),
-    SNE(GeneralRegister, GeneralRegister),
+    SEC(Register, u8),               // this stands for Skip-Equal-Constant
+    SNEC(Register, u8),              // this stands for Skip-Not-Equal-Constant
+    SER(Register, Register),  // this stands for Skip-Equal-Registers
+    LDC(Register, u8),               // this stands for Load-Constant
+    ADDC(Register, u8),              // this stand for Add-Constant
+    LDR(Register, Register),  // this stands for Load-Register
+    OR(Register, Register),
+    AND(Register, Register),
+    XOR(Register, Register),
+    ADDR(Register, Register), // this stands for Add-Registers
+    SUB(Register, Register),
+    SHR(Register),
+    SUBN(Register, Register),
+    SHL(Register),
+    SNE(Register, Register),
     LDI(u16),                               // this stands for Load-I
     JPA(u16),                               // this stands for Jump-Address
-    RND(GeneralRegister, u8),
-    DRW(GeneralRegister, GeneralRegister, u8),
-    SKP(GeneralRegister),
-    SKNP(GeneralRegister),
-    LDRD(GeneralRegister),                  // this stands for Load-Register-Delay
-    LDVK(GeneralRegister),                  // this stands for Load-Register-Key
-    LDDR(GeneralRegister),                  // this stands for Load-Delay-Register
-    LDSR(GeneralRegister),                  // this stands for Load-Sound-Register
-    ADDI(GeneralRegister),
-    LDIR(GeneralRegister),                  // this stands for Load-I-Register
-    LDBR(GeneralRegister),                  // this stands for Load-B-Register
+    RND(Register, u8),
+    DRW(Register, Register, u8),
+    SKP(Register),
+    SKNP(Register),
+    LDRD(Register),                  // this stands for Load-Register-Delay
+    LDVK(Register),                  // this stands for Load-Register-Key
+    LDDR(Register),                  // this stands for Load-Delay-Register
+    LDSR(Register),                  // this stands for Load-Sound-Register
+    ADDI(Register),
+    LDIR(Register),                  // this stands for Load-I-Register
+    LDBR(Register),                  // this stands for Load-B-Register
 }
 
 pub trait ToInstruction {
@@ -133,104 +133,104 @@ impl Instruction {
             },
             // SE Vx kk
             (0x3, register_bits, _, _) => {
-                let register = GeneralRegister::new(register_bits);
+                let register = Register::new(register_bits);
                 let constant = (instruction & 0b0000000011111111) as u8;
 
                 Instruction::SEC(register, constant)
             },
             // SE Vx kk (not equal)
             (0x4, register_bits, _, _) => {
-                let register = GeneralRegister::new(register_bits);
+                let register = Register::new(register_bits);
                 let constant = (instruction & 0b0000000011111111) as u8;
 
                 Instruction::SNEC(register, constant)
             },
             // SE Vx Vy
             (0x5, register_x_bits, register_y_bits, 0x0) => {
-                let register_x = GeneralRegister::new(register_x_bits);
-                let register_y = GeneralRegister::new(register_y_bits);
+                let register_x = Register::new(register_x_bits);
+                let register_y = Register::new(register_y_bits);
 
                 Instruction::SER(register_x, register_y)
             },
             // LD Vx kk
             (0x6, register_bits, _, _) => {
-                let register = GeneralRegister::new(register_bits);
+                let register = Register::new(register_bits);
                 let constant = (instruction & 0b0000000011111111) as u8;
 
                 Instruction::LDC(register, constant)
             },
             // ADD Vx kk
             (0x7, register_bits, _, _) => {
-                let register = GeneralRegister::new(register_bits);
+                let register = Register::new(register_bits);
                 let constant = (instruction & 0b0000000011111111) as u8;
 
                 Instruction::ADDC(register, constant)
             },
             // LD Vx Vy
             (0x8, register_x_bits, register_y_bits, 0x0) => {
-                let register_x = GeneralRegister::new(register_x_bits);
-                let register_y = GeneralRegister::new(register_y_bits);
+                let register_x = Register::new(register_x_bits);
+                let register_y = Register::new(register_y_bits);
 
                 Instruction::LDR(register_x, register_y)
             },
             // OR Vx Vy
             (0x8, register_x_bits, register_y_bits, 0x1) => {
-                let register_x = GeneralRegister::new(register_x_bits);
-                let register_y = GeneralRegister::new(register_y_bits);
+                let register_x = Register::new(register_x_bits);
+                let register_y = Register::new(register_y_bits);
 
                 Instruction::OR(register_x, register_y)
             },
             // AND Vx Vy
             (0x8, register_x_bits, register_y_bits, 0x2) => {
-                let register_x = GeneralRegister::new(register_x_bits);
-                let register_y = GeneralRegister::new(register_y_bits);
+                let register_x = Register::new(register_x_bits);
+                let register_y = Register::new(register_y_bits);
 
                 Instruction::AND(register_x, register_y)
             },
             // XOR Vx Vy
             (0x8, register_x_bits, register_y_bits, 0x3) => {
-                let register_x = GeneralRegister::new(register_x_bits);
-                let register_y = GeneralRegister::new(register_y_bits);
+                let register_x = Register::new(register_x_bits);
+                let register_y = Register::new(register_y_bits);
 
                 Instruction::XOR(register_x, register_y)
             },
             // ADD Vx Vy
             (0x8, register_x_bits, register_y_bits, 0x4) => {
-                let register_x = GeneralRegister::new(register_x_bits);
-                let register_y = GeneralRegister::new(register_y_bits);
+                let register_x = Register::new(register_x_bits);
+                let register_y = Register::new(register_y_bits);
 
                 Instruction::ADDR(register_x, register_y)
             },
             // SUB Vx Vy
             (0x8, register_x_bits, register_y_bits, 0x5) => {
-                let register_x = GeneralRegister::new(register_x_bits);
-                let register_y = GeneralRegister::new(register_y_bits);
+                let register_x = Register::new(register_x_bits);
+                let register_y = Register::new(register_y_bits);
 
                 Instruction::SUB(register_x, register_y)
             },
             // SHR Vx
             (0x8, register_x_bits, _, 0x6) => {
-                let register_x = GeneralRegister::new(register_x_bits);
+                let register_x = Register::new(register_x_bits);
 
                 Instruction::SHR(register_x)
             },
             // SUBN Vx Vy
             (0x8, register_x_bits, register_y_bits, 0x7) => {
-                let register_x = GeneralRegister::new(register_x_bits);
-                let register_y = GeneralRegister::new(register_y_bits);
+                let register_x = Register::new(register_x_bits);
+                let register_y = Register::new(register_y_bits);
 
                 Instruction::SUBN(register_x, register_y)
             },
             // SHL Vx
             (0x8, register_x_bits, _, 0xE) => {
-                let register_x = GeneralRegister::new(register_x_bits);
+                let register_x = Register::new(register_x_bits);
 
                 Instruction::SHL(register_x)
             },
             // SNE Vx Vy
             (0x9, register_x_bits, register_y_bits, 0x0) => {
-                let register_x = GeneralRegister::new(register_x_bits);
-                let register_y = GeneralRegister::new(register_y_bits);
+                let register_x = Register::new(register_x_bits);
+                let register_y = Register::new(register_y_bits);
 
                 Instruction::SNE(register_x, register_y)
             },
@@ -248,69 +248,69 @@ impl Instruction {
             },
             // RND Vx kk
             (0xC, register_bits, _, _) => {
-                let register = GeneralRegister::new(register_bits);
+                let register = Register::new(register_bits);
                 let constant = (instruction & 0b0000000011111111) as u8;
 
                 Instruction::RND(register, constant)
             },
             // DRW Vx Vy nibble
             (0xD, register_x_bits, register_y_bits, bytes) => {
-                let register_x = GeneralRegister::new(register_x_bits);
-                let register_y = GeneralRegister::new(register_y_bits);
+                let register_x = Register::new(register_x_bits);
+                let register_y = Register::new(register_y_bits);
 
                 Instruction::DRW(register_x, register_y, bytes)
             },
             // SKP Vx
             (0xE, register_bits, 0x9, 0xE) => {
-                let register = GeneralRegister::new(register_bits);
+                let register = Register::new(register_bits);
 
                 Instruction::SKP(register)
             },
             // SKNP Vx
             (0xE, register_bits, 0xA, 0x1) => {
-                let register = GeneralRegister::new(register_bits);
+                let register = Register::new(register_bits);
 
                 Instruction::SKNP(register)
             },
             // LD Vx DT
             (0xF, register_bits, 0x0, 0x7) => {
-                let register = GeneralRegister::new(register_bits);
+                let register = Register::new(register_bits);
 
                 Instruction::LDRD(register)
             },
             // LD Vx K
             (0xF, register_bits, 0x0, 0xA) => {
-                let register = GeneralRegister::new(register_bits);
+                let register = Register::new(register_bits);
 
                 Instruction::LDVK(register)
             },
             // LD DT Vx
             (0xF, register_bits, 0x1, 0x5) => {
-                let register = GeneralRegister::new(register_bits);
+                let register = Register::new(register_bits);
 
                 Instruction::LDDR(register)
             },
             // LD ST Vx
             (0xF, register_bits, 0x1, 0x8) => {
-                let register = GeneralRegister::new(register_bits);
+                let register = Register::new(register_bits);
 
                 Instruction::LDSR(register)
             },
             // ADD I Vx
             (0xF, register_bits, 0x1, 0xE) => {
-                let register = GeneralRegister::new(register_bits);
+                let register = Register::new(register_bits);
 
                 Instruction::ADDI(register)
             },
             // LD F Vx
             (0xF, register_bits, 0x2, 0x9) => {
-                let register = GeneralRegister::new(register_bits);
+                let register = Register::new(register_bits);
 
                 Instruction::LDIR(register)
             },
             // LD B Vx
             (0xF, register_bits, 0x3, 0x3) => {
-                let register = GeneralRegister::new(register_bits);
+                let register = Register::new(register_bits);
 
                 Instruction::LDBR(register)
             },
@@ -374,7 +374,7 @@ mod tests {
         let sec = Instruction::new([0x3, 0x0, 0x3]);
         match sec {
             Instruction::SEC(register, constant) if constant == 3 &&
-                                                    register == GeneralRegister::V0 => {
+                                                    register == Register::V0 => {
                 assert!(true);
             }
             _ => assert!(false),
@@ -386,7 +386,7 @@ mod tests {
         let snec = Instruction::new([0x4, 0x0, 0x3]);
         match snec {
             Instruction::SNEC(register, constant) if constant == 3  &&
-                                                     register == GeneralRegister::V0 => {
+                                                     register == Register::V0 => {
                 assert!(true);
             },
             _ => assert!(false),
@@ -397,8 +397,8 @@ mod tests {
     fn decode_ser() {
         let ser = Instruction::new([0x5, 0x0, 0x1, 0x0]);
         match ser {
-            Instruction::SER(register_x, register_y) => if register_x == GeneralRegister::V0 &&
-                                                           register_y == GeneralRegister::V1 {
+            Instruction::SER(register_x, register_y) => if register_x == Register::V0 &&
+                                                           register_y == Register::V1 {
                 assert!(true);
             },
             _ => assert!(false),
@@ -409,7 +409,7 @@ mod tests {
     fn decode_ldc() {
         let ldc = Instruction::new([0x6, 0x0, 0x3]);
         match ldc {
-            Instruction::LDC(register, constant) if register == GeneralRegister::V0 &&
+            Instruction::LDC(register, constant) if register == Register::V0 &&
                                                                 constant == 3 => {
                 assert!(true);
             },
@@ -422,7 +422,7 @@ mod tests {
         let addc = Instruction::new([0x7, 0x0, 0x3]);
         match addc {
             Instruction::ADDC(register, constant) => if constant == 3 &&
-                                                        register == GeneralRegister::V0 {
+                                                        register == Register::V0 {
                 assert!(true);
             },
             _ => assert!(false),
@@ -433,8 +433,8 @@ mod tests {
     fn decode_ldr() {
         let ldr = Instruction::new([0x8, 0x0, 0x1, 0x0]);
         match ldr {
-            Instruction::LDR(register_x, register_y) => if register_x == GeneralRegister::V0 &&
-                                                           register_y == GeneralRegister::V1 {
+            Instruction::LDR(register_x, register_y) => if register_x == Register::V0 &&
+                                                           register_y == Register::V1 {
                 assert!(true);
             },
             _ => assert!(false),
@@ -445,8 +445,8 @@ mod tests {
     fn decode_or() {
         let or = Instruction::new([0x8, 0x0, 0x1, 0x1]);
         match or {
-            Instruction::OR(register_x, register_y) => if register_x == GeneralRegister::V0 &&
-                                                          register_y == GeneralRegister::V1 {
+            Instruction::OR(register_x, register_y) => if register_x == Register::V0 &&
+                                                          register_y == Register::V1 {
                 assert!(true);
             },
             _ => assert!(false),
@@ -457,8 +457,8 @@ mod tests {
     fn decode_and() {
         let and = Instruction::new([0x8, 0x0, 0x1, 0x2]);
         match and {
-            Instruction::AND(register_x, register_y) => if register_x == GeneralRegister::V0 &&
-                                                           register_y == GeneralRegister::V1 {
+            Instruction::AND(register_x, register_y) => if register_x == Register::V0 &&
+                                                           register_y == Register::V1 {
                 assert!(true);
             },
             _ => assert!(false),
@@ -469,8 +469,8 @@ mod tests {
     fn decode_xor() {
         let xor = Instruction::new([0x8, 0x0, 0x1, 0x3]);
         match xor {
-            Instruction::XOR(register_x, register_y) => if register_x == GeneralRegister::V0 &&
-                                                           register_y == GeneralRegister::V1 {
+            Instruction::XOR(register_x, register_y) => if register_x == Register::V0 &&
+                                                           register_y == Register::V1 {
                 assert!(true);
             },
             _ => assert!(false),
@@ -481,8 +481,8 @@ mod tests {
     fn decode_addr() {
         let addr = Instruction::new([0x8, 0x0, 0x1, 0x4]);
         match addr {
-            Instruction::ADDR(register_x, register_y) => if register_x == GeneralRegister::V0 &&
-                                                            register_y == GeneralRegister::V1 {
+            Instruction::ADDR(register_x, register_y) => if register_x == Register::V0 &&
+                                                            register_y == Register::V1 {
                 assert!(true);
             },
             _ => assert!(false),
@@ -493,8 +493,8 @@ mod tests {
     fn decode_sub() {
         let sub = Instruction::new([0x8, 0x0, 0x1, 0x5]);
         match sub {
-            Instruction::SUB(register_x, register_y) => if register_x == GeneralRegister::V0 &&
-                                                           register_y == GeneralRegister::V1 {
+            Instruction::SUB(register_x, register_y) => if register_x == Register::V0 &&
+                                                           register_y == Register::V1 {
                 assert!(true);
             },
             _ => assert!(false),
@@ -505,7 +505,7 @@ mod tests {
     fn decode_shr() {
         let shr = Instruction::new([0x8, 0x1, 0x0, 0x6]);
         match shr {
-            Instruction::SHR(register) if register == GeneralRegister::V1 => assert!(true),
+            Instruction::SHR(register) if register == Register::V1 => assert!(true),
             _ => assert!(false),
         }
     }
@@ -514,8 +514,8 @@ mod tests {
     fn decode_subn() {
         let subn = Instruction::new([0x8, 0x0, 0x1, 0x7]);
         match subn {
-            Instruction::SUBN(register_x, register_y) if register_x == GeneralRegister::V0 &&
-                                                         register_y == GeneralRegister::V1 => {
+            Instruction::SUBN(register_x, register_y) if register_x == Register::V0 &&
+                                                         register_y == Register::V1 => {
                 assert!(true);
             },
             _ => assert!(false),
@@ -526,7 +526,7 @@ mod tests {
     fn decode_shl() {
         let shl = Instruction::new([0x8, 0x1, 0x0, 0xE]);
         match shl {
-            Instruction::SHL(register) if register == GeneralRegister::V1 => assert!(true),
+            Instruction::SHL(register) if register == Register::V1 => assert!(true),
             _ => assert!(false),
         }
     }
@@ -535,8 +535,8 @@ mod tests {
     fn decode_sne() {
         let sne = Instruction::new([0x9, 0x0, 0x1, 0x0]);
         match sne {
-            Instruction::SNE(register_x, register_y) if register_x == GeneralRegister::V0 &&
-                                                        register_y == GeneralRegister::V1 => {
+            Instruction::SNE(register_x, register_y) if register_x == Register::V0 &&
+                                                        register_y == Register::V1 => {
                 assert!(true);
             },
             _ => assert!(false),
@@ -565,7 +565,7 @@ mod tests {
     fn decode_rnd() {
         let rnd = Instruction::new([0xC, 0x1, 0x3]);
         match rnd {
-            Instruction::RND(register, constant) if register == GeneralRegister::V1 &&
+            Instruction::RND(register, constant) if register == Register::V1 &&
                                                      constant == 0x3 => {
                 assert!(true);
             },
@@ -577,8 +577,8 @@ mod tests {
     fn decode_drw() {
         let drw = Instruction::new([0xD, 0x1, 0x2, 0x4]);
         match drw {
-            Instruction::DRW(register_x, register_y, bytes) if register_x == GeneralRegister::V1 &&
-                                                               register_y == GeneralRegister::V2 &&
+            Instruction::DRW(register_x, register_y, bytes) if register_x == Register::V1 &&
+                                                               register_y == Register::V2 &&
                                                                bytes == 4 => {
                 assert!(true);
             },
@@ -590,7 +590,7 @@ mod tests {
     fn decode_skp() {
         let skp = Instruction::new([0xE, 0x1, 0x9, 0xE]);
         match skp {
-            Instruction::SKP(register) if register == GeneralRegister::V1 => {
+            Instruction::SKP(register) if register == Register::V1 => {
                 assert!(true);
             },
             _ => assert!(false),
@@ -601,7 +601,7 @@ mod tests {
     fn decode_sknp() {
         let sknp = Instruction::new([0xE, 0x1, 0xA, 0x1]);
         match sknp {
-            Instruction::SKNP(register) if register == GeneralRegister::V1 => {
+            Instruction::SKNP(register) if register == Register::V1 => {
                 assert!(true);
             },
             _ => assert!(false),
@@ -612,7 +612,7 @@ mod tests {
     fn decode_ldrd() {
         let ldrd = Instruction::new([0xF, 0x1, 0x0, 0x7]);
         match ldrd {
-            Instruction::LDRD(register) if register == GeneralRegister::V1 => {
+            Instruction::LDRD(register) if register == Register::V1 => {
                 assert!(true);
             },
             _ => assert!(false),
@@ -623,7 +623,7 @@ mod tests {
     fn decode_ldvk() {
         let ldvk = Instruction::new([0xF, 0x1, 0x0, 0xA]);
         match ldvk {
-            Instruction::LDVK(register) if register == GeneralRegister::V1 => {
+            Instruction::LDVK(register) if register == Register::V1 => {
                 assert!(true);
             },
             _ => assert!(false),
@@ -634,7 +634,7 @@ mod tests {
     fn decode_lddr() {
         let lddr = Instruction::new([0xF, 0x1, 0x1, 0x5]);
         match lddr {
-            Instruction::LDDR(register) if register == GeneralRegister::V1 => {
+            Instruction::LDDR(register) if register == Register::V1 => {
                 assert!(true);
             },
             _ => assert!(false),
@@ -645,7 +645,7 @@ mod tests {
     fn decode_ldsr() {
         let ldsr = Instruction::new([0xF, 0x1, 0x1, 0x8]);
         match ldsr {
-            Instruction::LDSR(register) if register == GeneralRegister::V1 => {
+            Instruction::LDSR(register) if register == Register::V1 => {
                 assert!(true);
             },
             _ => assert!(false),
@@ -656,7 +656,7 @@ mod tests {
     fn decode_addi() {
         let addi = Instruction::new([0xF, 0x1, 0x1, 0xE]);
         match addi {
-            Instruction::ADDI(register) if register == GeneralRegister::V1 => {
+            Instruction::ADDI(register) if register == Register::V1 => {
                 assert!(true);
             },
             _ => assert!(false),
@@ -667,7 +667,7 @@ mod tests {
     fn decode_ldir() {
         let ldir = Instruction::new([0xF, 0x1, 0x2, 0x9]);
         match ldir {
-            Instruction::LDIR(register) if register == GeneralRegister::V1 => {
+            Instruction::LDIR(register) if register == Register::V1 => {
                 assert!(true);
             },
             _ => assert!(false),
@@ -677,8 +677,8 @@ mod tests {
     #[test]
     fn decode_ldbr() {
         let ldbr = Instruction::new([0xF, 0x1, 0x3, 0x3]);
-        match ldir {
-            Instruction::LDBR(register) if register == GeneralRegister::V1 => {
+        match ldbr {
+            Instruction::LDBR(register) if register == Register::V1 => {
                 assert!(true);
             },
             _ => assert!(false),
