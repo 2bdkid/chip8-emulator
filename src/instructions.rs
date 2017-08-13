@@ -34,6 +34,7 @@ pub enum Instruction {
     ADDI(Register),
     LDIR(Register),                  // this stands for Load-I-Register
     LDBR(Register),                  // this stands for Load-B-Register
+    LDRS(Register),                  // this stand for Load-Registers
 }
 
 pub trait ToInstruction {
@@ -211,7 +212,6 @@ impl Instruction {
             // SHR Vx
             (0x8, register_x_bits, _, 0x6) => {
                 let register_x = Register::new(register_x_bits);
-
                 Instruction::SHR(register_x)
             },
             // SUBN Vx Vy
@@ -224,7 +224,6 @@ impl Instruction {
             // SHL Vx
             (0x8, register_x_bits, _, 0xE) => {
                 let register_x = Register::new(register_x_bits);
-
                 Instruction::SHL(register_x)
             },
             // SNE Vx Vy
@@ -237,13 +236,11 @@ impl Instruction {
             // LD I address
             (0xA, _, _, _) => {
                 let address = instruction & 0b0000111111111111;
-
                 Instruction::LDI(address)
             },
             // JP V0 address
             (0xB, _, _, _) => {
                 let address = instruction & 0b0000111111111111;
-
                 Instruction::JPA(address)
             },
             // RND Vx kk
@@ -263,56 +260,52 @@ impl Instruction {
             // SKP Vx
             (0xE, register_bits, 0x9, 0xE) => {
                 let register = Register::new(register_bits);
-
                 Instruction::SKP(register)
             },
             // SKNP Vx
             (0xE, register_bits, 0xA, 0x1) => {
                 let register = Register::new(register_bits);
-
                 Instruction::SKNP(register)
             },
             // LD Vx DT
             (0xF, register_bits, 0x0, 0x7) => {
                 let register = Register::new(register_bits);
-
                 Instruction::LDRD(register)
             },
             // LD Vx K
             (0xF, register_bits, 0x0, 0xA) => {
                 let register = Register::new(register_bits);
-
                 Instruction::LDVK(register)
             },
             // LD DT Vx
             (0xF, register_bits, 0x1, 0x5) => {
                 let register = Register::new(register_bits);
-
                 Instruction::LDDR(register)
             },
             // LD ST Vx
             (0xF, register_bits, 0x1, 0x8) => {
                 let register = Register::new(register_bits);
-
                 Instruction::LDSR(register)
             },
             // ADD I Vx
             (0xF, register_bits, 0x1, 0xE) => {
                 let register = Register::new(register_bits);
-
                 Instruction::ADDI(register)
             },
             // LD F Vx
             (0xF, register_bits, 0x2, 0x9) => {
                 let register = Register::new(register_bits);
-
                 Instruction::LDIR(register)
             },
             // LD B Vx
             (0xF, register_bits, 0x3, 0x3) => {
                 let register = Register::new(register_bits);
-
                 Instruction::LDBR(register)
+            },
+            //LD I Vx
+            (0xF, register_bits, 0x5, 0x5) => {
+                let register = Register::new(register_bits);
+                Instruction::LDRS(register)
             },
             // Anything else
             (_, _, _, _) => panic!("Invalid instruction: {:#x}", instruction),
@@ -679,6 +672,17 @@ mod tests {
         let ldbr = Instruction::new([0xF, 0x1, 0x3, 0x3]);
         match ldbr {
             Instruction::LDBR(register) if register == Register::V1 => {
+                assert!(true);
+            },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_ldrs() {
+        let ldrs = Instruction::new([0xF, 0x5, 0x5, 0x5]);
+        match ldrs {
+            Instruction::LDRS(register) if register == Register::V5 => {
                 assert!(true);
             },
             _ => assert!(false),
