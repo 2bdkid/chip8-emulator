@@ -4,12 +4,12 @@ const WIDTH: usize = 64;
 const HEIGHT: usize = 32;
 
 pub struct Chip8Display {
-    pixels: [bool; WIDTH * HEIGHT]
+    pixels: [bool; WIDTH * HEIGHT],
 }
 
 impl Chip8Display {
     pub fn flip_pixel(&mut self, x: usize, y: usize) {
-        if x >=64 || y >= 32 {
+        if x >= 64 || y >= 32 {
             panic!("Tried to flip pixel that was out of range: ({}, {})", x, y);
         }
 
@@ -28,9 +28,7 @@ impl Chip8Display {
 
 impl Default for Chip8Display {
     fn default() -> Chip8Display {
-        Chip8Display {
-            pixels: [false; HEIGHT * WIDTH]
-        }
+        Chip8Display { pixels: [false; HEIGHT * WIDTH] }
     }
 }
 

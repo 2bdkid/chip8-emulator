@@ -112,11 +112,11 @@ impl Chip8Machine {
             (result, false) => {
                 *self.registers.get_mut(register_x) = result;
                 *self.registers.get_mut(Register::VF) = 0;
-            },
+            }
             (result, true) => {
                 *self.registers.get_mut(register_x) = result;
                 *self.registers.get_mut(Register::VF) = 1;
-            },
+            }
         }
     }
 
@@ -154,7 +154,7 @@ impl Chip8Machine {
         } else {
             *self.registers.get_mut(Register::VF) = 0;
         }
-        
+
         *self.registers.get_mut(register_x) = register_y_value - register_x_value;
     }
 
@@ -275,204 +275,204 @@ impl Chip8Machine {
         match register {
             Register::V0 => {
                 self.memory_bank.write(i_value, self.registers.get(Register::V0));
-            },
+            }
             Register::V1 => {
                 self.memory_bank.write(i_value, self.registers.get(Register::V0));
                 self.memory_bank.write(i_value + 1, self.registers.get(Register::V1));
-            },
+            }
             Register::V2 => {
-                self.memory_bank.write(i_value , self.registers.get(Register::V0));
-                self.memory_bank.write(i_value + 1 , self.registers.get(Register::V1));
-                self.memory_bank.write(i_value + 2 , self.registers.get(Register::V2));
-            },
+                self.memory_bank.write(i_value, self.registers.get(Register::V0));
+                self.memory_bank.write(i_value + 1, self.registers.get(Register::V1));
+                self.memory_bank.write(i_value + 2, self.registers.get(Register::V2));
+            }
             Register::V3 => {
-                self.memory_bank.write(i_value , self.registers.get(Register::V0));
-                self.memory_bank.write(i_value + 1 , self.registers.get(Register::V1));
-                self.memory_bank.write(i_value + 2 , self.registers.get(Register::V2));
-                self.memory_bank.write(i_value + 3 , self.registers.get(Register::V3));
-            },
+                self.memory_bank.write(i_value, self.registers.get(Register::V0));
+                self.memory_bank.write(i_value + 1, self.registers.get(Register::V1));
+                self.memory_bank.write(i_value + 2, self.registers.get(Register::V2));
+                self.memory_bank.write(i_value + 3, self.registers.get(Register::V3));
+            }
             Register::V4 => {
-                self.memory_bank.write(i_value , self.registers.get(Register::V0));
-                self.memory_bank.write(i_value + 1 , self.registers.get(Register::V1));
-                self.memory_bank.write(i_value + 2 , self.registers.get(Register::V2));
-                self.memory_bank.write(i_value + 3 , self.registers.get(Register::V3));
-                self.memory_bank.write(i_value + 4 , self.registers.get(Register::V4));
-            },
+                self.memory_bank.write(i_value, self.registers.get(Register::V0));
+                self.memory_bank.write(i_value + 1, self.registers.get(Register::V1));
+                self.memory_bank.write(i_value + 2, self.registers.get(Register::V2));
+                self.memory_bank.write(i_value + 3, self.registers.get(Register::V3));
+                self.memory_bank.write(i_value + 4, self.registers.get(Register::V4));
+            }
             Register::V5 => {
-                self.memory_bank.write(i_value , self.registers.get(Register::V0));
-                self.memory_bank.write(i_value + 1 , self.registers.get(Register::V1));
-                self.memory_bank.write(i_value + 2 , self.registers.get(Register::V2));
-                self.memory_bank.write(i_value + 3 , self.registers.get(Register::V3));
-                self.memory_bank.write(i_value + 4 , self.registers.get(Register::V4));
-                self.memory_bank.write(i_value + 5 , self.registers.get(Register::V5));
-            },
+                self.memory_bank.write(i_value, self.registers.get(Register::V0));
+                self.memory_bank.write(i_value + 1, self.registers.get(Register::V1));
+                self.memory_bank.write(i_value + 2, self.registers.get(Register::V2));
+                self.memory_bank.write(i_value + 3, self.registers.get(Register::V3));
+                self.memory_bank.write(i_value + 4, self.registers.get(Register::V4));
+                self.memory_bank.write(i_value + 5, self.registers.get(Register::V5));
+            }
             Register::V6 => {
-                self.memory_bank.write(i_value , self.registers.get(Register::V0));
-                self.memory_bank.write(i_value + 1 , self.registers.get(Register::V1));
-                self.memory_bank.write(i_value + 2 , self.registers.get(Register::V2));
-                self.memory_bank.write(i_value + 3 , self.registers.get(Register::V3));
-                self.memory_bank.write(i_value + 4 , self.registers.get(Register::V4));
-                self.memory_bank.write(i_value + 5 , self.registers.get(Register::V5));   
-                self.memory_bank.write(i_value + 6 , self.registers.get(Register::V6));            
-            },
+                self.memory_bank.write(i_value, self.registers.get(Register::V0));
+                self.memory_bank.write(i_value + 1, self.registers.get(Register::V1));
+                self.memory_bank.write(i_value + 2, self.registers.get(Register::V2));
+                self.memory_bank.write(i_value + 3, self.registers.get(Register::V3));
+                self.memory_bank.write(i_value + 4, self.registers.get(Register::V4));
+                self.memory_bank.write(i_value + 5, self.registers.get(Register::V5));
+                self.memory_bank.write(i_value + 6, self.registers.get(Register::V6));
+            }
             Register::V7 => {
-                self.memory_bank.write(i_value , self.registers.get(Register::V0));
-                self.memory_bank.write(i_value + 1 , self.registers.get(Register::V1));
-                self.memory_bank.write(i_value + 2 , self.registers.get(Register::V2));
-                self.memory_bank.write(i_value + 3 , self.registers.get(Register::V3));
-                self.memory_bank.write(i_value + 4 , self.registers.get(Register::V4));
-                self.memory_bank.write(i_value + 5 , self.registers.get(Register::V5));   
-                self.memory_bank.write(i_value + 6 , self.registers.get(Register::V6));  
-                self.memory_bank.write(i_value + 7 , self.registers.get(Register::V7));
-            },
+                self.memory_bank.write(i_value, self.registers.get(Register::V0));
+                self.memory_bank.write(i_value + 1, self.registers.get(Register::V1));
+                self.memory_bank.write(i_value + 2, self.registers.get(Register::V2));
+                self.memory_bank.write(i_value + 3, self.registers.get(Register::V3));
+                self.memory_bank.write(i_value + 4, self.registers.get(Register::V4));
+                self.memory_bank.write(i_value + 5, self.registers.get(Register::V5));
+                self.memory_bank.write(i_value + 6, self.registers.get(Register::V6));
+                self.memory_bank.write(i_value + 7, self.registers.get(Register::V7));
+            }
             Register::V8 => {
-                self.memory_bank.write(i_value , self.registers.get(Register::V0));
-                self.memory_bank.write(i_value + 1 , self.registers.get(Register::V1));
-                self.memory_bank.write(i_value + 2 , self.registers.get(Register::V2));
-                self.memory_bank.write(i_value + 3 , self.registers.get(Register::V3));
-                self.memory_bank.write(i_value + 4 , self.registers.get(Register::V4));
-                self.memory_bank.write(i_value + 5 , self.registers.get(Register::V5));   
-                self.memory_bank.write(i_value + 6 , self.registers.get(Register::V6));  
-                self.memory_bank.write(i_value + 7 , self.registers.get(Register::V7));
-                self.memory_bank.write(i_value + 8 , self.registers.get(Register::V8));
-            },
+                self.memory_bank.write(i_value, self.registers.get(Register::V0));
+                self.memory_bank.write(i_value + 1, self.registers.get(Register::V1));
+                self.memory_bank.write(i_value + 2, self.registers.get(Register::V2));
+                self.memory_bank.write(i_value + 3, self.registers.get(Register::V3));
+                self.memory_bank.write(i_value + 4, self.registers.get(Register::V4));
+                self.memory_bank.write(i_value + 5, self.registers.get(Register::V5));
+                self.memory_bank.write(i_value + 6, self.registers.get(Register::V6));
+                self.memory_bank.write(i_value + 7, self.registers.get(Register::V7));
+                self.memory_bank.write(i_value + 8, self.registers.get(Register::V8));
+            }
             Register::V9 => {
-                self.memory_bank.write(i_value , self.registers.get(Register::V0));
-                self.memory_bank.write(i_value + 1 , self.registers.get(Register::V1));
-                self.memory_bank.write(i_value + 2 , self.registers.get(Register::V2));
-                self.memory_bank.write(i_value + 3 , self.registers.get(Register::V3));
-                self.memory_bank.write(i_value + 4 , self.registers.get(Register::V4));
-                self.memory_bank.write(i_value + 5 , self.registers.get(Register::V5));   
-                self.memory_bank.write(i_value + 6 , self.registers.get(Register::V6));  
-                self.memory_bank.write(i_value + 7 , self.registers.get(Register::V7));
-                self.memory_bank.write(i_value + 8 , self.registers.get(Register::V8));
-                self.memory_bank.write(i_value + 9 , self.registers.get(Register::V9));
-            },
+                self.memory_bank.write(i_value, self.registers.get(Register::V0));
+                self.memory_bank.write(i_value + 1, self.registers.get(Register::V1));
+                self.memory_bank.write(i_value + 2, self.registers.get(Register::V2));
+                self.memory_bank.write(i_value + 3, self.registers.get(Register::V3));
+                self.memory_bank.write(i_value + 4, self.registers.get(Register::V4));
+                self.memory_bank.write(i_value + 5, self.registers.get(Register::V5));
+                self.memory_bank.write(i_value + 6, self.registers.get(Register::V6));
+                self.memory_bank.write(i_value + 7, self.registers.get(Register::V7));
+                self.memory_bank.write(i_value + 8, self.registers.get(Register::V8));
+                self.memory_bank.write(i_value + 9, self.registers.get(Register::V9));
+            }
             Register::VA => {
-                self.memory_bank.write(i_value , self.registers.get(Register::V0));
-                self.memory_bank.write(i_value + 1 , self.registers.get(Register::V1));
-                self.memory_bank.write(i_value + 2 , self.registers.get(Register::V2));
-                self.memory_bank.write(i_value + 3 , self.registers.get(Register::V3));
-                self.memory_bank.write(i_value + 4 , self.registers.get(Register::V4));
-                self.memory_bank.write(i_value + 5 , self.registers.get(Register::V5));   
-                self.memory_bank.write(i_value + 6 , self.registers.get(Register::V6));  
-                self.memory_bank.write(i_value + 7 , self.registers.get(Register::V7));
-                self.memory_bank.write(i_value + 8 , self.registers.get(Register::V8));
-                self.memory_bank.write(i_value + 9 , self.registers.get(Register::V9));
-                self.memory_bank.write(i_value + 10 , self.registers.get(Register::VA));
-            },
+                self.memory_bank.write(i_value, self.registers.get(Register::V0));
+                self.memory_bank.write(i_value + 1, self.registers.get(Register::V1));
+                self.memory_bank.write(i_value + 2, self.registers.get(Register::V2));
+                self.memory_bank.write(i_value + 3, self.registers.get(Register::V3));
+                self.memory_bank.write(i_value + 4, self.registers.get(Register::V4));
+                self.memory_bank.write(i_value + 5, self.registers.get(Register::V5));
+                self.memory_bank.write(i_value + 6, self.registers.get(Register::V6));
+                self.memory_bank.write(i_value + 7, self.registers.get(Register::V7));
+                self.memory_bank.write(i_value + 8, self.registers.get(Register::V8));
+                self.memory_bank.write(i_value + 9, self.registers.get(Register::V9));
+                self.memory_bank.write(i_value + 10, self.registers.get(Register::VA));
+            }
             Register::VB => {
-                self.memory_bank.write(i_value , self.registers.get(Register::V0));
-                self.memory_bank.write(i_value + 1 , self.registers.get(Register::V1));
-                self.memory_bank.write(i_value + 2 , self.registers.get(Register::V2));
-                self.memory_bank.write(i_value + 3 , self.registers.get(Register::V3));
-                self.memory_bank.write(i_value + 4 , self.registers.get(Register::V4));
-                self.memory_bank.write(i_value + 5 , self.registers.get(Register::V5));   
-                self.memory_bank.write(i_value + 6 , self.registers.get(Register::V6));  
-                self.memory_bank.write(i_value + 7 , self.registers.get(Register::V7));
-                self.memory_bank.write(i_value + 8 , self.registers.get(Register::V8));
-                self.memory_bank.write(i_value + 9 , self.registers.get(Register::V9));
-                self.memory_bank.write(i_value + 10 , self.registers.get(Register::VA));
-                self.memory_bank.write(i_value + 11 , self.registers.get(Register::VB));
-            },
+                self.memory_bank.write(i_value, self.registers.get(Register::V0));
+                self.memory_bank.write(i_value + 1, self.registers.get(Register::V1));
+                self.memory_bank.write(i_value + 2, self.registers.get(Register::V2));
+                self.memory_bank.write(i_value + 3, self.registers.get(Register::V3));
+                self.memory_bank.write(i_value + 4, self.registers.get(Register::V4));
+                self.memory_bank.write(i_value + 5, self.registers.get(Register::V5));
+                self.memory_bank.write(i_value + 6, self.registers.get(Register::V6));
+                self.memory_bank.write(i_value + 7, self.registers.get(Register::V7));
+                self.memory_bank.write(i_value + 8, self.registers.get(Register::V8));
+                self.memory_bank.write(i_value + 9, self.registers.get(Register::V9));
+                self.memory_bank.write(i_value + 10, self.registers.get(Register::VA));
+                self.memory_bank.write(i_value + 11, self.registers.get(Register::VB));
+            }
             Register::VC => {
-                self.memory_bank.write(i_value , self.registers.get(Register::V0));
-                self.memory_bank.write(i_value + 1 , self.registers.get(Register::V1));
-                self.memory_bank.write(i_value + 2 , self.registers.get(Register::V2));
-                self.memory_bank.write(i_value + 3 , self.registers.get(Register::V3));
-                self.memory_bank.write(i_value + 4 , self.registers.get(Register::V4));
-                self.memory_bank.write(i_value + 5 , self.registers.get(Register::V5));   
-                self.memory_bank.write(i_value + 6 , self.registers.get(Register::V6));  
-                self.memory_bank.write(i_value + 7 , self.registers.get(Register::V7));
-                self.memory_bank.write(i_value + 8 , self.registers.get(Register::V8));
-                self.memory_bank.write(i_value + 9 , self.registers.get(Register::V9));
-                self.memory_bank.write(i_value + 10 , self.registers.get(Register::VA));
-                self.memory_bank.write(i_value + 11 , self.registers.get(Register::VB));
-                self.memory_bank.write(i_value + 12 , self.registers.get(Register::VC));
-            },
+                self.memory_bank.write(i_value, self.registers.get(Register::V0));
+                self.memory_bank.write(i_value + 1, self.registers.get(Register::V1));
+                self.memory_bank.write(i_value + 2, self.registers.get(Register::V2));
+                self.memory_bank.write(i_value + 3, self.registers.get(Register::V3));
+                self.memory_bank.write(i_value + 4, self.registers.get(Register::V4));
+                self.memory_bank.write(i_value + 5, self.registers.get(Register::V5));
+                self.memory_bank.write(i_value + 6, self.registers.get(Register::V6));
+                self.memory_bank.write(i_value + 7, self.registers.get(Register::V7));
+                self.memory_bank.write(i_value + 8, self.registers.get(Register::V8));
+                self.memory_bank.write(i_value + 9, self.registers.get(Register::V9));
+                self.memory_bank.write(i_value + 10, self.registers.get(Register::VA));
+                self.memory_bank.write(i_value + 11, self.registers.get(Register::VB));
+                self.memory_bank.write(i_value + 12, self.registers.get(Register::VC));
+            }
             Register::VD => {
-                self.memory_bank.write(i_value , self.registers.get(Register::V0));
-                self.memory_bank.write(i_value + 1 , self.registers.get(Register::V1));
-                self.memory_bank.write(i_value + 2 , self.registers.get(Register::V2));
-                self.memory_bank.write(i_value + 3 , self.registers.get(Register::V3));
-                self.memory_bank.write(i_value + 4 , self.registers.get(Register::V4));
-                self.memory_bank.write(i_value + 5 , self.registers.get(Register::V5));   
-                self.memory_bank.write(i_value + 6 , self.registers.get(Register::V6));  
-                self.memory_bank.write(i_value + 7 , self.registers.get(Register::V7));
-                self.memory_bank.write(i_value + 8 , self.registers.get(Register::V8));
-                self.memory_bank.write(i_value + 9 , self.registers.get(Register::V9));
-                self.memory_bank.write(i_value + 10 , self.registers.get(Register::VA));
-                self.memory_bank.write(i_value + 11 , self.registers.get(Register::VB));
-                self.memory_bank.write(i_value + 12 , self.registers.get(Register::VC));
-                self.memory_bank.write(i_value + 13 , self.registers.get(Register::VD));
-            },
+                self.memory_bank.write(i_value, self.registers.get(Register::V0));
+                self.memory_bank.write(i_value + 1, self.registers.get(Register::V1));
+                self.memory_bank.write(i_value + 2, self.registers.get(Register::V2));
+                self.memory_bank.write(i_value + 3, self.registers.get(Register::V3));
+                self.memory_bank.write(i_value + 4, self.registers.get(Register::V4));
+                self.memory_bank.write(i_value + 5, self.registers.get(Register::V5));
+                self.memory_bank.write(i_value + 6, self.registers.get(Register::V6));
+                self.memory_bank.write(i_value + 7, self.registers.get(Register::V7));
+                self.memory_bank.write(i_value + 8, self.registers.get(Register::V8));
+                self.memory_bank.write(i_value + 9, self.registers.get(Register::V9));
+                self.memory_bank.write(i_value + 10, self.registers.get(Register::VA));
+                self.memory_bank.write(i_value + 11, self.registers.get(Register::VB));
+                self.memory_bank.write(i_value + 12, self.registers.get(Register::VC));
+                self.memory_bank.write(i_value + 13, self.registers.get(Register::VD));
+            }
             Register::VE => {
-                self.memory_bank.write(i_value , self.registers.get(Register::V0));
-                self.memory_bank.write(i_value + 1 , self.registers.get(Register::V1));
-                self.memory_bank.write(i_value + 2 , self.registers.get(Register::V2));
-                self.memory_bank.write(i_value + 3 , self.registers.get(Register::V3));
-                self.memory_bank.write(i_value + 4 , self.registers.get(Register::V4));
-                self.memory_bank.write(i_value + 5 , self.registers.get(Register::V5));   
-                self.memory_bank.write(i_value + 6 , self.registers.get(Register::V6));  
-                self.memory_bank.write(i_value + 7 , self.registers.get(Register::V7));
-                self.memory_bank.write(i_value + 8 , self.registers.get(Register::V8));
-                self.memory_bank.write(i_value + 9 , self.registers.get(Register::V9));
-                self.memory_bank.write(i_value + 10 , self.registers.get(Register::VA));
-                self.memory_bank.write(i_value + 11 , self.registers.get(Register::VB));
-                self.memory_bank.write(i_value + 12 , self.registers.get(Register::VC));
-                self.memory_bank.write(i_value + 13 , self.registers.get(Register::VD));
-                self.memory_bank.write(i_value + 14 , self.registers.get(Register::VE));
-            },
+                self.memory_bank.write(i_value, self.registers.get(Register::V0));
+                self.memory_bank.write(i_value + 1, self.registers.get(Register::V1));
+                self.memory_bank.write(i_value + 2, self.registers.get(Register::V2));
+                self.memory_bank.write(i_value + 3, self.registers.get(Register::V3));
+                self.memory_bank.write(i_value + 4, self.registers.get(Register::V4));
+                self.memory_bank.write(i_value + 5, self.registers.get(Register::V5));
+                self.memory_bank.write(i_value + 6, self.registers.get(Register::V6));
+                self.memory_bank.write(i_value + 7, self.registers.get(Register::V7));
+                self.memory_bank.write(i_value + 8, self.registers.get(Register::V8));
+                self.memory_bank.write(i_value + 9, self.registers.get(Register::V9));
+                self.memory_bank.write(i_value + 10, self.registers.get(Register::VA));
+                self.memory_bank.write(i_value + 11, self.registers.get(Register::VB));
+                self.memory_bank.write(i_value + 12, self.registers.get(Register::VC));
+                self.memory_bank.write(i_value + 13, self.registers.get(Register::VD));
+                self.memory_bank.write(i_value + 14, self.registers.get(Register::VE));
+            }
             Register::VF => {
-                self.memory_bank.write(i_value , self.registers.get(Register::V0));
-                self.memory_bank.write(i_value + 1 , self.registers.get(Register::V1));
-                self.memory_bank.write(i_value + 2 , self.registers.get(Register::V2));
-                self.memory_bank.write(i_value + 3 , self.registers.get(Register::V3));
-                self.memory_bank.write(i_value + 4 , self.registers.get(Register::V4));
-                self.memory_bank.write(i_value + 5 , self.registers.get(Register::V5));   
-                self.memory_bank.write(i_value + 6 , self.registers.get(Register::V6));  
-                self.memory_bank.write(i_value + 7 , self.registers.get(Register::V7));
-                self.memory_bank.write(i_value + 8 , self.registers.get(Register::V8));
-                self.memory_bank.write(i_value + 9 , self.registers.get(Register::V9));
-                self.memory_bank.write(i_value + 10 , self.registers.get(Register::VA));
-                self.memory_bank.write(i_value + 11 , self.registers.get(Register::VB));
-                self.memory_bank.write(i_value + 12 , self.registers.get(Register::VC));
-                self.memory_bank.write(i_value + 13 , self.registers.get(Register::VD));
-                self.memory_bank.write(i_value + 14 , self.registers.get(Register::VE));
-                self.memory_bank.write(i_value + 15 , self.registers.get(Register::VF));
-            },
+                self.memory_bank.write(i_value, self.registers.get(Register::V0));
+                self.memory_bank.write(i_value + 1, self.registers.get(Register::V1));
+                self.memory_bank.write(i_value + 2, self.registers.get(Register::V2));
+                self.memory_bank.write(i_value + 3, self.registers.get(Register::V3));
+                self.memory_bank.write(i_value + 4, self.registers.get(Register::V4));
+                self.memory_bank.write(i_value + 5, self.registers.get(Register::V5));
+                self.memory_bank.write(i_value + 6, self.registers.get(Register::V6));
+                self.memory_bank.write(i_value + 7, self.registers.get(Register::V7));
+                self.memory_bank.write(i_value + 8, self.registers.get(Register::V8));
+                self.memory_bank.write(i_value + 9, self.registers.get(Register::V9));
+                self.memory_bank.write(i_value + 10, self.registers.get(Register::VA));
+                self.memory_bank.write(i_value + 11, self.registers.get(Register::VB));
+                self.memory_bank.write(i_value + 12, self.registers.get(Register::VC));
+                self.memory_bank.write(i_value + 13, self.registers.get(Register::VD));
+                self.memory_bank.write(i_value + 14, self.registers.get(Register::VE));
+                self.memory_bank.write(i_value + 15, self.registers.get(Register::VF));
+            }
         }
     }
 
     fn run_rdrs(&mut self, register: Register) {
         let i_value = self.registers.i as usize;
-        
+
         match register {
             Register::V0 => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
-            },
+            }
             Register::V1 => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
                 *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
-            },
+            }
             Register::V2 => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
                 *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
                 *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
-            },
+            }
             Register::V3 => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
                 *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
                 *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
                 *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
-            },
+            }
             Register::V4 => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
                 *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
                 *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
                 *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
                 *self.registers.get_mut(Register::V4) = self.memory_bank.read(i_value + 4);
-            },
+            }
             Register::V5 => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
                 *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
@@ -480,7 +480,7 @@ impl Chip8Machine {
                 *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
                 *self.registers.get_mut(Register::V4) = self.memory_bank.read(i_value + 4);
                 *self.registers.get_mut(Register::V5) = self.memory_bank.read(i_value + 5);
-            },
+            }
             Register::V6 => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
                 *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
@@ -489,7 +489,7 @@ impl Chip8Machine {
                 *self.registers.get_mut(Register::V4) = self.memory_bank.read(i_value + 4);
                 *self.registers.get_mut(Register::V5) = self.memory_bank.read(i_value + 5);
                 *self.registers.get_mut(Register::V6) = self.memory_bank.read(i_value + 6);
-            },
+            }
             Register::V7 => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
                 *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
@@ -499,7 +499,7 @@ impl Chip8Machine {
                 *self.registers.get_mut(Register::V5) = self.memory_bank.read(i_value + 5);
                 *self.registers.get_mut(Register::V6) = self.memory_bank.read(i_value + 6);
                 *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 7);
-            },
+            }
             Register::V8 => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
                 *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
@@ -510,7 +510,7 @@ impl Chip8Machine {
                 *self.registers.get_mut(Register::V6) = self.memory_bank.read(i_value + 6);
                 *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 7);
                 *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 8);
-            },
+            }
             Register::V9 => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
                 *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
@@ -522,7 +522,7 @@ impl Chip8Machine {
                 *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 7);
                 *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 8);
                 *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 9);
-            },
+            }
             Register::VA => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
                 *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
@@ -535,7 +535,7 @@ impl Chip8Machine {
                 *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 8);
                 *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 9);
                 *self.registers.get_mut(Register::VA) = self.memory_bank.read(i_value + 10);
-            },
+            }
             Register::VB => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
                 *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
@@ -549,7 +549,7 @@ impl Chip8Machine {
                 *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 9);
                 *self.registers.get_mut(Register::VA) = self.memory_bank.read(i_value + 10);
                 *self.registers.get_mut(Register::VB) = self.memory_bank.read(i_value + 11);
-            },
+            }
             Register::VC => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
                 *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
@@ -564,7 +564,7 @@ impl Chip8Machine {
                 *self.registers.get_mut(Register::VA) = self.memory_bank.read(i_value + 10);
                 *self.registers.get_mut(Register::VB) = self.memory_bank.read(i_value + 11);
                 *self.registers.get_mut(Register::VC) = self.memory_bank.read(i_value + 12);
-            },
+            }
             Register::VD => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
                 *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
@@ -580,7 +580,7 @@ impl Chip8Machine {
                 *self.registers.get_mut(Register::VB) = self.memory_bank.read(i_value + 11);
                 *self.registers.get_mut(Register::VC) = self.memory_bank.read(i_value + 12);
                 *self.registers.get_mut(Register::VD) = self.memory_bank.read(i_value + 13);
-            },
+            }
             Register::VE => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
                 *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
@@ -597,7 +597,7 @@ impl Chip8Machine {
                 *self.registers.get_mut(Register::VC) = self.memory_bank.read(i_value + 12);
                 *self.registers.get_mut(Register::VD) = self.memory_bank.read(i_value + 13);
                 *self.registers.get_mut(Register::VE) = self.memory_bank.read(i_value + 14);
-            },
+            }
             Register::VF => {
                 *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
                 *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
@@ -615,7 +615,7 @@ impl Chip8Machine {
                 *self.registers.get_mut(Register::VD) = self.memory_bank.read(i_value + 13);
                 *self.registers.get_mut(Register::VE) = self.memory_bank.read(i_value + 14);
                 *self.registers.get_mut(Register::VF) = self.memory_bank.read(i_value + 15);
-            },
+            }
         }
     }
 
@@ -623,109 +623,109 @@ impl Chip8Machine {
         match *op {
             Instruction::SYS(address) => {
                 self.run_sys(address);
-            },
+            }
             Instruction::CLS => {
                 self.run_cls();
-            },
+            }
             Instruction::RET => {
                 self.run_ret();
-            },
+            }
             Instruction::JP(address) => {
                 self.run_jp(address);
-            },
+            }
             Instruction::CALL(address) => {
                 self.run_call(address);
-            },
+            }
             Instruction::SEC(register, constant) => {
                 self.run_sec(register, constant);
-            },
+            }
             Instruction::SNEC(register, constant) => {
                 self.run_snec(register, constant);
-            },
+            }
             Instruction::SER(register_x, register_y) => {
                 self.run_ser(register_x, register_y);
-            },
+            }
             Instruction::LDC(register, constant) => {
                 self.run_ldc(register, constant);
-            },
+            }
             Instruction::ADDC(register, constant) => {
                 self.run_addc(register, constant);
-            },
+            }
             Instruction::LDR(register_x, register_y) => {
                 self.run_ldr(register_x, register_y);
-            },
+            }
             Instruction::OR(register_x, register_y) => {
                 self.run_or(register_x, register_y);
-            },
+            }
             Instruction::AND(register_x, register_y) => {
                 self.run_and(register_x, register_y);
-            },
-            Instruction::XOR(register_x ,register_y) => {
+            }
+            Instruction::XOR(register_x, register_y) => {
                 self.run_xor(register_x, register_y);
-            },
+            }
             Instruction::ADDR(register_x, register_y) => {
                 self.run_addr(register_x, register_y);
-            },
+            }
             Instruction::SUB(register_x, register_y) => {
                 self.run_sub(register_x, register_y);
-            },
+            }
             Instruction::SHR(register) => {
                 self.run_shr(register);
-            },
+            }
             Instruction::SUBN(register_x, register_y) => {
                 self.run_subn(register_x, register_y);
-            },
+            }
             Instruction::SHL(register) => {
                 self.run_shl(register);
-            },
+            }
             Instruction::SNE(register_x, register_y) => {
                 self.run_sne(register_x, register_y);
-            },
+            }
             Instruction::LDI(address) => {
                 self.run_ldi(address);
-            },
+            }
             Instruction::JPA(address) => {
                 self.run_jpa(address);
-            },
+            }
             Instruction::RND(register, constant) => {
                 self.run_rnd(register, constant);
-            },
+            }
             Instruction::DRW(register_x, register_y, bytes) => {
                 self.run_drw(register_x, register_y, bytes);
-            },
+            }
             Instruction::SKP(register) => {
                 self.run_skp(register);
-            },
+            }
             Instruction::SKNP(register) => {
                 self.run_sknp(register);
-            },
+            }
             Instruction::LDRD(register) => {
                 self.run_ldrd(register);
-            },
+            }
             Instruction::LDVK(register) => {
                 self.run_ldvk(register);
-            },
+            }
             Instruction::LDDR(register) => {
                 self.run_lddr(register);
-            },
+            }
             Instruction::LDSR(register) => {
                 self.run_ldsr(register);
-            },
+            }
             Instruction::ADDI(register) => {
                 self.run_addi(register);
-            },
+            }
             Instruction::LDIR(register) => {
                 self.run_ldir(register);
-            },
+            }
             Instruction::LDBR(register) => {
                 self.run_ldbr(register);
-            },
+            }
             Instruction::LDRS(register) => {
                 self.run_ldrs(register);
-            },
+            }
             Instruction::RDRS(register) => {
                 self.run_rdrs(register);
-            },
+            }
         }
     }
 
