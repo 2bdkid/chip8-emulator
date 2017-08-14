@@ -444,6 +444,181 @@ impl Chip8Machine {
         }
     }
 
+    fn run_rdrs(&mut self, register: Register) {
+        let i_value = self.registers.i as usize;
+        
+        match register {
+            Register::V0 => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+            },
+            Register::V1 => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+                *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
+            },
+            Register::V2 => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+                *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
+                *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
+            },
+            Register::V3 => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+                *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
+                *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
+                *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
+            },
+            Register::V4 => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+                *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
+                *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
+                *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
+                *self.registers.get_mut(Register::V4) = self.memory_bank.read(i_value + 4);
+            },
+            Register::V5 => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+                *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
+                *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
+                *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
+                *self.registers.get_mut(Register::V4) = self.memory_bank.read(i_value + 4);
+                *self.registers.get_mut(Register::V5) = self.memory_bank.read(i_value + 5);
+            },
+            Register::V6 => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+                *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
+                *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
+                *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
+                *self.registers.get_mut(Register::V4) = self.memory_bank.read(i_value + 4);
+                *self.registers.get_mut(Register::V5) = self.memory_bank.read(i_value + 5);
+                *self.registers.get_mut(Register::V6) = self.memory_bank.read(i_value + 6);
+            },
+            Register::V7 => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+                *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
+                *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
+                *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
+                *self.registers.get_mut(Register::V4) = self.memory_bank.read(i_value + 4);
+                *self.registers.get_mut(Register::V5) = self.memory_bank.read(i_value + 5);
+                *self.registers.get_mut(Register::V6) = self.memory_bank.read(i_value + 6);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 7);
+            },
+            Register::V8 => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+                *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
+                *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
+                *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
+                *self.registers.get_mut(Register::V4) = self.memory_bank.read(i_value + 4);
+                *self.registers.get_mut(Register::V5) = self.memory_bank.read(i_value + 5);
+                *self.registers.get_mut(Register::V6) = self.memory_bank.read(i_value + 6);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 7);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 8);
+            },
+            Register::V9 => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+                *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
+                *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
+                *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
+                *self.registers.get_mut(Register::V4) = self.memory_bank.read(i_value + 4);
+                *self.registers.get_mut(Register::V5) = self.memory_bank.read(i_value + 5);
+                *self.registers.get_mut(Register::V6) = self.memory_bank.read(i_value + 6);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 7);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 8);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 9);
+            },
+            Register::VA => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+                *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
+                *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
+                *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
+                *self.registers.get_mut(Register::V4) = self.memory_bank.read(i_value + 4);
+                *self.registers.get_mut(Register::V5) = self.memory_bank.read(i_value + 5);
+                *self.registers.get_mut(Register::V6) = self.memory_bank.read(i_value + 6);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 7);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 8);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 9);
+                *self.registers.get_mut(Register::VA) = self.memory_bank.read(i_value + 10);
+            },
+            Register::VB => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+                *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
+                *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
+                *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
+                *self.registers.get_mut(Register::V4) = self.memory_bank.read(i_value + 4);
+                *self.registers.get_mut(Register::V5) = self.memory_bank.read(i_value + 5);
+                *self.registers.get_mut(Register::V6) = self.memory_bank.read(i_value + 6);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 7);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 8);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 9);
+                *self.registers.get_mut(Register::VA) = self.memory_bank.read(i_value + 10);
+                *self.registers.get_mut(Register::VB) = self.memory_bank.read(i_value + 11);
+            },
+            Register::VC => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+                *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
+                *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
+                *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
+                *self.registers.get_mut(Register::V4) = self.memory_bank.read(i_value + 4);
+                *self.registers.get_mut(Register::V5) = self.memory_bank.read(i_value + 5);
+                *self.registers.get_mut(Register::V6) = self.memory_bank.read(i_value + 6);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 7);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 8);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 9);
+                *self.registers.get_mut(Register::VA) = self.memory_bank.read(i_value + 10);
+                *self.registers.get_mut(Register::VB) = self.memory_bank.read(i_value + 11);
+                *self.registers.get_mut(Register::VC) = self.memory_bank.read(i_value + 12);
+            },
+            Register::VD => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+                *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
+                *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
+                *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
+                *self.registers.get_mut(Register::V4) = self.memory_bank.read(i_value + 4);
+                *self.registers.get_mut(Register::V5) = self.memory_bank.read(i_value + 5);
+                *self.registers.get_mut(Register::V6) = self.memory_bank.read(i_value + 6);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 7);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 8);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 9);
+                *self.registers.get_mut(Register::VA) = self.memory_bank.read(i_value + 10);
+                *self.registers.get_mut(Register::VB) = self.memory_bank.read(i_value + 11);
+                *self.registers.get_mut(Register::VC) = self.memory_bank.read(i_value + 12);
+                *self.registers.get_mut(Register::VD) = self.memory_bank.read(i_value + 13);
+            },
+            Register::VE => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+                *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
+                *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
+                *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
+                *self.registers.get_mut(Register::V4) = self.memory_bank.read(i_value + 4);
+                *self.registers.get_mut(Register::V5) = self.memory_bank.read(i_value + 5);
+                *self.registers.get_mut(Register::V6) = self.memory_bank.read(i_value + 6);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 7);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 8);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 9);
+                *self.registers.get_mut(Register::VA) = self.memory_bank.read(i_value + 10);
+                *self.registers.get_mut(Register::VB) = self.memory_bank.read(i_value + 11);
+                *self.registers.get_mut(Register::VC) = self.memory_bank.read(i_value + 12);
+                *self.registers.get_mut(Register::VD) = self.memory_bank.read(i_value + 13);
+                *self.registers.get_mut(Register::VE) = self.memory_bank.read(i_value + 14);
+            },
+            Register::VF => {
+                *self.registers.get_mut(Register::V0) = self.memory_bank.read(i_value);
+                *self.registers.get_mut(Register::V1) = self.memory_bank.read(i_value + 1);
+                *self.registers.get_mut(Register::V2) = self.memory_bank.read(i_value + 2);
+                *self.registers.get_mut(Register::V3) = self.memory_bank.read(i_value + 3);
+                *self.registers.get_mut(Register::V4) = self.memory_bank.read(i_value + 4);
+                *self.registers.get_mut(Register::V5) = self.memory_bank.read(i_value + 5);
+                *self.registers.get_mut(Register::V6) = self.memory_bank.read(i_value + 6);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 7);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 8);
+                *self.registers.get_mut(Register::V7) = self.memory_bank.read(i_value + 9);
+                *self.registers.get_mut(Register::VA) = self.memory_bank.read(i_value + 10);
+                *self.registers.get_mut(Register::VB) = self.memory_bank.read(i_value + 11);
+                *self.registers.get_mut(Register::VC) = self.memory_bank.read(i_value + 12);
+                *self.registers.get_mut(Register::VD) = self.memory_bank.read(i_value + 13);
+                *self.registers.get_mut(Register::VE) = self.memory_bank.read(i_value + 14);
+                *self.registers.get_mut(Register::VF) = self.memory_bank.read(i_value + 15);
+            },
+        }
+    }
+
     fn run_op(&mut self, op: &Instruction) {
         match *op {
             Instruction::SYS(address) => {
@@ -547,6 +722,9 @@ impl Chip8Machine {
             },
             Instruction::LDRS(register) => {
                 self.run_ldrs(register);
+            },
+            Instruction::RDRS(register) => {
+                self.run_rdrs(register);
             },
         }
     }

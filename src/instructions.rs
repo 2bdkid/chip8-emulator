@@ -34,7 +34,8 @@ pub enum Instruction {
     ADDI(Register),
     LDIR(Register),                  // this stands for Load-I-Register
     LDBR(Register),                  // this stands for Load-B-Register
-    LDRS(Register),                  // this stand for Load-Registers
+    LDRS(Register),                  // this stands for Load-Registers
+    RDRS(Register),                  // this stands for Read-Registers
 }
 
 pub trait ToInstruction {
@@ -306,6 +307,10 @@ impl Instruction {
             (0xF, register_bits, 0x5, 0x5) => {
                 let register = Register::new(register_bits);
                 Instruction::LDRS(register)
+            },
+            (0xf, register_bits, 0x6, 0x5) => {
+                let register = Register::new(register_bits);
+                Instruction::RDRS(register)
             },
             // Anything else
             (_, _, _, _) => panic!("Invalid instruction: {:#x}", instruction),
@@ -683,6 +688,17 @@ mod tests {
         let ldrs = Instruction::new([0xF, 0x5, 0x5, 0x5]);
         match ldrs {
             Instruction::LDRS(register) if register == Register::V5 => {
+                assert!(true);
+            },
+            _ => assert!(false),
+        }
+    }
+
+    #[test]
+    fn decode_rdrs() {
+        let rdrs = Instruction::new([0xF, 0x5, 0x6, 0x5]);
+        match rdrs {
+            Instruction::RDRS(register) if register == Register::V5 => {
                 assert!(true);
             },
             _ => assert!(false),
