@@ -193,8 +193,49 @@ impl Chip8Machine {
     }
 
     fn run_drw(&mut self, register_x: Register, register_y: Register, bytes: u8) {
-        // dear god
-        unimplemented!();
+        let i_value = self.registers.i as usize;
+        let mut sprite: Vec<u8> = Vec::new();
+
+        let x = self.registers.get(register_x) as usize;
+        let y = self.registers.get(register_y) as usize;
+
+        let mut collision = false;
+
+        for offset in 0..bytes as usize {
+            let sprite_piece = self.memory_bank.read(i_value + offset);
+            sprite.push(sprite_piece);
+        }
+
+        for (y_offset, layer) in sprite.iter().enumerate() {
+            let mut pixels: [bool; 8] = [false; 8];
+
+            if layer & 0b10000000 == 0b10000000 { pixels[0] = true; }
+            if layer & 0b01000000 == 0b01000000 { pixels[1] = true; }
+            if layer & 0b00100000 == 0b00100000 { pixels[2] = true; }
+            if layer & 0b00010000 == 0b00010000 { pixels[3] = true; }
+            if layer & 0b00001000 == 0b00001000 { pixels[4] = true; }
+            if layer & 0b00000100 == 0b00000100 { pixels[5] = true; }
+            if layer & 0b00000010 == 0b00000010 { pixels[6] = true; }
+            if layer & 0b00000001 == 0b00000001 { pixels[7] = true; }
+
+            for (x_offset, pixel) in pixels.iter().enumerate() {
+                let mut x_draw_position = x + x_offset;
+                let mut y_draw_position = y + y_offset;
+
+                if x_draw_position > 63 { x_draw_position -= 64; }
+                if y_draw_position > 32 { y_draw_position -= 32; }
+
+                if self.display.draw_pixel(x_draw_position, y_draw_position, *pixel) {
+                    collision = true;
+                }
+            }
+
+            if collision {
+                *self.registers.get_mut(Register::VF) = 1;
+            } else {
+                *self.registers.get_mut(Register::VF) = 0;
+            }
+        }
     }
 
     fn run_skp(&mut self, register: Register) {
@@ -730,8 +771,27 @@ impl Chip8Machine {
         }
     }
 
-    pub fn run(&mut self, instructions: &Vec<u16>) {
-        ncurses::initscr();
-        ncurses::endwin();
+    /*
+    pub fn run(&mut self, binary_instructions: &Vec<u16>) {
+        let mut instructions: Vec<Instruction> = Vec::new();
+
+        for instruction in binary_instructions {
+            instructions.push(Instruction::new(*instruction));
+        }
+
+        for instruction in &instructions {
+            self.run_op(&instruction);
+        }
+    }
+    */
+
+    pub fn run(&mut self, binary_instructions: &Vec<u16>) {
+        self.run_op(&Instruction::new([0x6, 0x0, 0x0]));
+        self.run_op(&Instruction::new([0x6, 0x1, 0x0]));
+        self.run_op(&Instruction::new([0x6, 0x2, 0xA]));
+        self.run_op(&Instruction::new([0xF, 0x2, 0x2, 0x9]));
+        self.run_op(&Instruction::new([0xD, 0x0, 0x1, 0x5]));
+
+        println!("{:?}", self.display);
     }
 }

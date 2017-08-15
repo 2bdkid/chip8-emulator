@@ -20,17 +20,17 @@ pub enum Key {
     F,
 }
 
-pub trait toKey {
+pub trait ToKey {
     fn to_key(&self) -> Key;
 }
 
-impl toKey for Key {
+impl ToKey for Key {
     fn to_key(&self) -> Key {
         *self
     }
 }
 
-impl toKey for u8 {
+impl ToKey for u8 {
     fn to_key(&self) -> Key {
         match *self {
             0 => Key::Zero,
@@ -75,7 +75,7 @@ pub struct Chip8Keyboard {
 }
 
 impl Chip8Keyboard {
-    pub fn is_pressed<T: toKey>(&self, key: T) -> bool {
+    pub fn is_pressed<T: ToKey>(&self, key: T) -> bool {
         let key = key.to_key();
 
         match key {

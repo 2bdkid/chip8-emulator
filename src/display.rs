@@ -8,13 +8,17 @@ pub struct Chip8Display {
 }
 
 impl Chip8Display {
-    pub fn flip_pixel(&mut self, x: usize, y: usize) {
+    pub fn draw_pixel(&mut self, x: usize, y: usize, pixel: bool) -> bool {
         if x >= 64 || y >= 32 {
             panic!("Tried to flip pixel that was out of range: ({}, {})", x, y);
         }
 
-        let pixel = self.pixels.chunks_mut(WIDTH).nth(y).unwrap().get_mut(x).unwrap();
-        *pixel = !*pixel;
+        let display_pixel = self.pixels.chunks_mut(WIDTH).nth(y).unwrap().get_mut(x).unwrap();
+        let collision: bool = *display_pixel && pixel;
+
+        *display_pixel ^= pixel;
+
+        collision
     }
 
     pub fn draw() {
