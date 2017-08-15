@@ -1,13 +1,12 @@
-use super::rand;
-use super::ncurses;
+use rand;
+use ncurses;
 
-use super::display;
-use super::instructions;
-use super::keyboard;
-use super::registers;
-use super::memory;
-use super::stack;
-use super::sprites;
+use display;
+use keyboard;
+use registers;
+use memory;
+use stack;
+use sprites;
 
 use instructions::Instruction;
 use registers::Register;
@@ -770,8 +769,7 @@ impl Chip8Machine {
             }
         }
     }
-
-    /*
+    
     pub fn run(&mut self, binary_instructions: &Vec<u16>) {
         let mut instructions: Vec<Instruction> = Vec::new();
 
@@ -782,9 +780,11 @@ impl Chip8Machine {
         for instruction in &instructions {
             self.run_op(&instruction);
         }
-    }
-    */
 
+        println!("{:#?}", self.display);
+    }
+    
+    /*
     pub fn run(&mut self, binary_instructions: &Vec<u16>) {
         self.run_op(&Instruction::new([0x6, 0x0, 0x0]));
         self.run_op(&Instruction::new([0x6, 0x1, 0x0]));
@@ -794,4 +794,5 @@ impl Chip8Machine {
 
         println!("{:?}", self.display);
     }
+    */
 }

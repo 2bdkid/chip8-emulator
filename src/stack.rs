@@ -23,10 +23,6 @@ impl Chip8Stack {
             panic!("Tried to pop empty stack");
         }
     }
-
-    pub fn top_address(&self) -> u16 {
-        self.array[self.sp]
-    }
 }
 
 impl Default for Chip8Stack {

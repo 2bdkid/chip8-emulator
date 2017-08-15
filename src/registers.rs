@@ -1,5 +1,3 @@
-use std::fmt;
-
 #[derive(Default, Debug)]
 pub struct Chip8Registers {
     v0: u8,
