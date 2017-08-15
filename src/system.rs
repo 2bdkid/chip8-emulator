@@ -1,4 +1,5 @@
 use super::rand;
+use super::ncurses;
 
 use super::display;
 use super::instructions;
@@ -729,7 +730,8 @@ impl Chip8Machine {
         }
     }
 
-    pub fn run(&mut self) {
-        println!("{:#?}", self.memory_bank);
+    pub fn run(&mut self, instructions: &Vec<u16>) {
+        ncurses::initscr();
+        ncurses::endwin();
     }
 }
