@@ -8,28 +8,30 @@ pub struct Chip8Memory {
 
 impl Chip8Memory {
     pub fn write(&mut self, location: usize, value: u8) {
-        *self.memory_bank
+        *self
+            .memory_bank
             .get_mut(location)
             .expect(format!("Tried to write invalid memory location: {:#x}", location).as_ref()) =
             value
     }
 
     pub fn read(&self, location: usize) -> u8 {
-        *self.memory_bank
+        *self
+            .memory_bank
             .get(location)
             .expect(format!("Tried to read invalid memory location: {:#x}", location).as_ref())
     }
 
     pub fn read_instruction(&self, location: usize) -> u16 {
-        let first = *self.memory_bank
+        let first = *self
+            .memory_bank
             .get(location)
             .expect(format!("Tried to read invalid memory location: {:#x}", location).as_ref());
 
-        let second = *self.memory_bank
+        let second = *self
+            .memory_bank
             .get(location + 1)
-            .expect(format!("Tried to read invalid memory location: {:#x}",
-                            location + 1)
-                .as_ref());
+            .expect(format!("Tried to read invalid memory location: {:#x}", location + 1).as_ref());
 
         (first as u16) << 8 | second as u16
     }
@@ -150,7 +152,9 @@ impl Default for Chip8Memory {
         memory[78] = 0x80;
         memory[79] = 0x80;
 
-        Chip8Memory { memory_bank: memory }
+        Chip8Memory {
+            memory_bank: memory,
+        }
     }
 }
 
@@ -176,10 +180,12 @@ impl fmt::Debug for Value {
 impl fmt::Debug for Chip8Memory {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_map()
-            .entries(self.memory_bank
-                .iter()
-                .enumerate()
-                .map(|(index, value)| (Address(index), Value(*value))))
+            .entries(
+                self.memory_bank
+                    .iter()
+                    .enumerate()
+                    .map(|(index, value)| (Address(index), Value(*value))),
+            )
             .finish()
     }
 }

@@ -44,6 +44,8 @@ impl fmt::Debug for Address {
 
 impl fmt::Debug for Chip8Stack {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_list().entries(self.array.iter().map(|address| Address(*address))).finish()
+        f.debug_list()
+            .entries(self.array.iter().map(|address| Address(*address)))
+            .finish()
     }
 }

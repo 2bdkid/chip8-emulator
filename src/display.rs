@@ -13,7 +13,13 @@ impl Chip8Display {
             panic!("Tried to flip pixel that was out of range: ({}, {})", x, y);
         }
 
-        let display_pixel = self.pixels.chunks_mut(WIDTH).nth(y).unwrap().get_mut(x).unwrap();
+        let display_pixel = self
+            .pixels
+            .chunks_mut(WIDTH)
+            .nth(y)
+            .unwrap()
+            .get_mut(x)
+            .unwrap();
         let collision: bool = *display_pixel && pixel;
 
         *display_pixel ^= pixel;
@@ -32,10 +38,11 @@ impl Chip8Display {
 
 impl Default for Chip8Display {
     fn default() -> Chip8Display {
-        Chip8Display { pixels: [false; HEIGHT * WIDTH] }
+        Chip8Display {
+            pixels: [false; HEIGHT * WIDTH],
+        }
     }
 }
-
 
 impl fmt::Debug for Chip8Display {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

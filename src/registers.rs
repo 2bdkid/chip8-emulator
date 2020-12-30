@@ -27,9 +27,9 @@ impl Default for Chip8Registers {
     fn default() -> Self {
         Chip8Registers {
             v0: 0,
-            v1: 0, 
+            v1: 0,
             v2: 0,
-            v3: 0, 
+            v3: 0,
             v4: 0,
             v5: 0,
             v6: 0,

@@ -59,7 +59,10 @@ impl ASCIISprite {
             13 => ASCIISprite::D,
             14 => ASCIISprite::E,
             15 => ASCIISprite::F,
-            _ => panic!(format!("Tried to create ASCII sprite from value {}", sprite)),
+            _ => panic!(format!(
+                "Tried to create ASCII sprite from value {}",
+                sprite
+            )),
         }
     }
 }

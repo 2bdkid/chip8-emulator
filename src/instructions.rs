@@ -7,11 +7,11 @@ pub enum Instruction {
     RET,
     JP(u16),
     CALL(u16),
-    SEC(Register, u8), // this stands for Skip-Equal-Constant
-    SNEC(Register, u8), // this stands for Skip-Not-Equal-Constant
+    SEC(Register, u8),       // this stands for Skip-Equal-Constant
+    SNEC(Register, u8),      // this stands for Skip-Not-Equal-Constant
     SER(Register, Register), // this stands for Skip-Equal-Registers
-    LDC(Register, u8), // this stands for Load-Constant
-    ADDC(Register, u8), // this stand for Add-Constant
+    LDC(Register, u8),       // this stands for Load-Constant
+    ADDC(Register, u8),      // this stand for Add-Constant
     LDR(Register, Register), // this stands for Load-Register
     OR(Register, Register),
     AND(Register, Register),
@@ -41,10 +41,12 @@ pub enum Instruction {
 
 impl Instruction {
     pub fn new(instruction: u16) -> Option<Instruction> {
-        let split_bits = (((instruction >> 12) & 0b1111) as u8,
-                          ((instruction >> 8) & 0b1111) as u8,
-                          ((instruction >> 4) & 0b1111) as u8,
-                          (instruction & 0b1111) as u8);
+        let split_bits = (
+            ((instruction >> 12) & 0b1111) as u8,
+            ((instruction >> 8) & 0b1111) as u8,
+            ((instruction >> 4) & 0b1111) as u8,
+            (instruction & 0b1111) as u8,
+        );
 
         match split_bits {
             // CLS
@@ -246,7 +248,7 @@ impl Instruction {
                 Some(Instruction::RDRS(register))
             }
             // Anything else
-            (_, _, _, _) => None
+            (_, _, _, _) => None,
         }
     }
 }
