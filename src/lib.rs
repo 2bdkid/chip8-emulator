@@ -1,6 +1,3 @@
-extern crate rand;
-extern crate ncurses;
-
 pub use system::Chip8Machine;
 
 mod display;

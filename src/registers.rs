@@ -1,4 +1,4 @@
-#[derive(Default, Debug)]
+#[derive(Debug)]
 pub struct Chip8Registers {
     v0: u8,
     v1: u8,
@@ -21,6 +21,34 @@ pub struct Chip8Registers {
     pub sound: u8,
     pub pc: u16,
     pub sp: u8,
+}
+
+impl Default for Chip8Registers {
+    fn default() -> Self {
+        Chip8Registers {
+            v0: 0,
+            v1: 0, 
+            v2: 0,
+            v3: 0, 
+            v4: 0,
+            v5: 0,
+            v6: 0,
+            v7: 0,
+            v8: 0,
+            v9: 0,
+            va: 0,
+            vb: 0,
+            vc: 0,
+            vd: 0,
+            ve: 0,
+            vf: 0,
+            i: 0,
+            delay: 0,
+            sound: 0,
+            pc: 512,
+            sp: 0,
+        }
+    }
 }
 
 impl Chip8Registers {
@@ -67,7 +95,7 @@ impl Chip8Registers {
     }
 }
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 pub enum Register {
     V0,
     V1,

@@ -8,19 +8,30 @@ pub struct Chip8Memory {
 
 impl Chip8Memory {
     pub fn write(&mut self, location: usize, value: u8) {
-        if let Some(memory_reference) = self.memory_bank.get_mut(location) {
-            *memory_reference = value;
-        } else {
-            panic!("Tried to write invalid memory location: {:#x}", location);
-        }
+        *self.memory_bank
+            .get_mut(location)
+            .expect(format!("Tried to write invalid memory location: {:#x}", location).as_ref()) =
+            value
     }
 
     pub fn read(&self, location: usize) -> u8 {
-        if let Some(memory_reference) = self.memory_bank.get(location) {
-            *memory_reference
-        } else {
-            panic!("Tried to read invalid memory location: {:#x}", location);
-        }
+        *self.memory_bank
+            .get(location)
+            .expect(format!("Tried to read invalid memory location: {:#x}", location).as_ref())
+    }
+
+    pub fn read_instruction(&self, location: usize) -> u16 {
+        let first = *self.memory_bank
+            .get(location)
+            .expect(format!("Tried to read invalid memory location: {:#x}", location).as_ref());
+
+        let second = *self.memory_bank
+            .get(location + 1)
+            .expect(format!("Tried to read invalid memory location: {:#x}",
+                            location + 1)
+                .as_ref());
+
+        (first as u16) << 8 | second as u16
     }
 }
 

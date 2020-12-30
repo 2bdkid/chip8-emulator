@@ -1,5 +1,3 @@
-use super::ncurses;
-
 #[derive(Clone, Copy)]
 pub enum Key {
     Zero,
@@ -105,23 +103,5 @@ impl Chip8Keyboard {
 }
 
 pub fn get_key() -> Key {
-    match ncurses::getch() {
-        48 => Key::Zero,
-        49 => Key::One,
-        50 => Key::Two,
-        51 => Key::Three,
-        52 => Key::Four,
-        53 => Key::Five,
-        54 => Key::Six,
-        55 => Key::Seven,
-        56 => Key::Eight,
-        57 => Key::Nine,
-        97 => Key::A,
-        98 => Key::B,
-        99 => Key::C,
-        100 => Key::D,
-        101 => Key::E,
-        102 => Key::F,
-        key @ _ => panic!(format!("Found key {}", key as u8 as char)),
-    }
+    unimplemented!();
 }
