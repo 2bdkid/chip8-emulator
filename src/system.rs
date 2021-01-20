@@ -10,23 +10,29 @@ use keyboard::Key;
 use registers::Register;
 use sprites::ASCIISprite;
 
-pub struct Chip8Machine {
-    memory_bank: memory::Chip8Memory,
+pub struct Machine {
+    memory_bank: memory::Memory,
     registers: registers::Chip8Registers,
     keyboard: keyboard::Chip8Keyboard,
     display: display::Chip8Display,
     stack: stack::Chip8Stack,
 }
 
-impl Chip8Machine {
-    pub fn new() -> Chip8Machine {
-        Chip8Machine {
-            memory_bank: memory::Chip8Memory::default(),
+impl Default for Machine {
+    fn default() -> Machine {
+        Machine {
+            memory_bank: memory::Memory::default(),
             registers: registers::Chip8Registers::default(),
             keyboard: keyboard::Chip8Keyboard::default(),
             display: display::Chip8Display::default(),
             stack: stack::Chip8Stack::default(),
         }
+    }
+}
+
+impl Machine {
+    pub fn new() -> Machine {
+        Machine::default()
     }
 
     fn run_sys(&mut self, address: u16) {
@@ -927,32 +933,17 @@ impl Chip8Machine {
     }
 
     pub fn run(&mut self) {
-        loop {
-            let instruction = self
-                .memory_bank
-                .read_instruction(self.registers.pc as usize);
-
-            if instruction == 0 {
-                break;
+        while let Ok(instruction) = self.memory_bank.read_instruction(self.registers.pc as usize) {
+            if let Some(instruction) = Instruction::new(instruction) {
+                self.run_op(&instruction);
             }
 
-            let instruction = Instruction::new(instruction);
-
-            match instruction {
-                Some(ref instruction) => {
-                    self.run_op(instruction);
-                    self.registers.pc += 2;
-                }
-                None => {
-                    self.registers.pc += 2;
-                }
-            }
-
+            self.registers.pc += 2;
             println!("{:?}", self.display);
         }
     }
 
-    pub fn load_memory(&mut self, program: &Vec<u8>) {
+    pub fn load_memory(&mut self, program: &[u8]) {
         for (position, byte) in program.iter().enumerate() {
             self.memory_bank.write(512 + position, *byte);
         }

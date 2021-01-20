@@ -11,6 +11,7 @@ name = "chip8_virtual_machine"
 version = "0.1.0"
 dependencies = [
  "rand",
+ "refinement",
 ]
 
 [[package]]
@@ -75,6 +76,12 @@ checksum = "3190ef7066a446f2e7f42e239d161e905420ccab01eb967c9eb27d21b2322a73"
 dependencies = [
  "rand_core",
 ]
+
+[[package]]
+name = "refinement"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "80d5c1e5ad7d6a5d720ba1d81a9e5e2eae8c598afdeaaa663721850c9e4a6c98"
 
 [[package]]
 name = "wasi"

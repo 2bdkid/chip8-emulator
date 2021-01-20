@@ -1,51 +1,52 @@
 use std::fmt;
+use std::error::Error;
 
-pub struct Chip8Stack {
+pub struct Stack {
     array: [u16; 16],
     sp: usize,
 }
 
-impl Chip8Stack {
-    pub fn push(&mut self, value: u16) {
-        if self.sp < 16 {
-            self.array[self.sp] = value;
-            self.sp += 1;
-        } else {
-            panic!("Tried to push address to a full stack");
-        }
-    }
+#[derive(Copy, Clone, Debug)]
+pub enum StackError {
+    Empty,
+    Full,
+}
 
-    pub fn pop(&mut self) -> u16 {
-        if self.sp > 0 {
-            self.sp -= 1;
-            self.array[self.sp + 1]
-        } else {
-            panic!("Tried to pop empty stack");
+impl fmt::Display for StackError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            StackError::Empty => write!(f, "Empty stack"),
+            StackError::Full => write!(f, "Full stack")
         }
     }
 }
 
-impl Default for Chip8Stack {
-    fn default() -> Chip8Stack {
-        Chip8Stack {
+impl Error for StackError {}
+
+impl Stack {
+    fn new() -> Stack {
+        Stack {
             array: [0; 16],
             sp: 0,
         }
     }
-}
 
-struct Address(u16);
-
-impl fmt::Debug for Address {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{:#x}", self.0)
+    pub fn push(&mut self, value: u16) -> Result<(), StackError> {
+        if self.sp < 16 {
+            self.array[self.sp] = value;
+            self.sp += 1;
+            Ok(())
+        } else {
+            Err(StackError::Full)
+        }
     }
-}
 
-impl fmt::Debug for Chip8Stack {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_list()
-            .entries(self.array.iter().map(|address| Address(*address)))
-            .finish()
+    pub fn pop(&mut self) -> Result<u16, StackError> {
+        if self.sp > 0 {
+            self.sp -= 1;
+            Ok(self.array[self.sp])
+        } else {
+            Err(StackError::Empty)
+        }
     }
 }

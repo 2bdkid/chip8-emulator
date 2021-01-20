@@ -1,22 +1,43 @@
 use std::fmt;
 use std::error::Error;
+use sprites::Sprite;
+use refinement::{Refinement, Predicate};
 
 const MEMORY_SIZE: usize = 4096;
 
-#[derive(Debug)]
-pub enum MemoryError {
-    InvalidRead(usize),
-    InvalidWrite(usize),
+#[derive(Copy, Clone, Debug)]
+pub struct InvalidAddress(usize);
+
+impl Error for InvalidAddress {}
+
+impl fmt::Display for InvalidAddress {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Invalid address {:#}", self.0)
+    }
 }
 
-impl Error for MemoryError {}
+struct LessThan4k;
 
-impl fmt::Display for MemoryError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            MemoryError::InvalidRead(loc) => write!(f, "Invalid read at {}", loc),
-            MemoryError::InvalidWrite(loc) => write!(f, "Invalid write at {}", loc),
+impl Predicate<usize> for LessThan4k {
+    fn test(addr: &usize) -> bool {
+        addr < 4096
+    }
+}
+
+pub type Address = Refinement<usize, LessThan4k>;
+
+impl Address {
+    fn next(&self) -> Result<Self, InvalidAddress> {
+        match self + 1 {
+            Some(addr) => Ok(addr),
+            None => Err(InvalidAddress(self.as_inner() + 1)),
         }
+    }
+}
+
+impl fmt::Display for Address {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        write!(f, "{:#}", self.as_inner())
     }
 }
 
@@ -25,36 +46,35 @@ pub struct Memory {
 }
 
 impl Memory {
-    pub fn new() -> Memory {
-        Memory::default()
+    pub fn write(&mut self, addr: Address, value: u8) {
+        self.memory_bank[addr.as_inner()] = value;
     }
 
-    pub fn write(&mut self, addr: usize, value: u8) -> Result<(), MemoryError> {
-        match self.memory_bank.get_mut(addr) {
-            Some(loc) => {
-                *loc = value;
-                Ok(())
-            },
-            None => Err(MemoryError::InvalidWrite(addr))
-        }
+    pub fn read(&self, addr: Address) -> u8 {
+        self.memory_bank[addr.as_inner()]
     }
 
-    pub fn read(&self, addr: usize) -> Result<u8, MemoryError> {
-        match self.memory_bank.get_mut(addr) {
-            Some(mem) => Ok(*mem),
-            None => Err(MemoryError::InvalidRead(addr)),
-        }
-    }
-
-    pub fn read_instruction(&self, addr: usize) -> Result<u16, MemoryError> {
-        let msb = self.read(addr)?;
-        let lsb = self.read(addr + 1)?;
+    pub fn read_instruction(&self, addr: Address) -> Result<u16, InvalidAddress> {
+        let msb = self.read(addr);
+        let lsb = self.read(addr.next()?);
         Ok((msb as u16) << 8 | lsb as u16)
+    }
+
+    pub fn fill_program(&self, program: &[u8]) -> Result<(), InvalidAddress> {
+        for (i, &b) in program.iter().enumerate() {
+            self.write(Address::new(512 + i)?, b);
+        }
+        Ok(())
+    }
+
+    pub fn sprite(&self, sprite: Sprite) -> &[u8] {
+        let start = sprite as usize * 5;
+        &self.memory_bank[start..start + 5]
     }
 }
 
-impl Default for Memory {
-    fn default() -> Memory {
+impl Memory {
+    fn new() -> Memory {
         let mut memory = [0u8; MEMORY_SIZE];
 
         // ascii sprites

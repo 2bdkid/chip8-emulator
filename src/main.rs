@@ -1,6 +1,4 @@
-extern crate chip8_virtual_machine;
-
-use chip8_virtual_machine::Chip8Machine;
+use chip8_virtual_machine::Machine;
 
 use std::env;
 use std::fs::File;

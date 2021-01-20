@@ -1,4 +1,4 @@
-pub use system::Chip8Machine;
+pub use system::Machine;
 
 mod display;
 mod instructions;

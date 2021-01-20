@@ -1,140 +1,38 @@
-#[derive(Debug)]
-pub struct Chip8Registers {
-    v0: u8,
-    v1: u8,
-    v2: u8,
-    v3: u8,
-    v4: u8,
-    v5: u8,
-    v6: u8,
-    v7: u8,
-    v8: u8,
-    v9: u8,
-    va: u8,
-    vb: u8,
-    vc: u8,
-    vd: u8,
-    ve: u8,
-    vf: u8,
-    pub i: u16,
-    pub delay: u8,
-    pub sound: u8,
-    pub pc: u16,
-    pub sp: u8,
-}
+#[derive(Clone, Copy, Debug)]
+struct Register8(u8);
 
-impl Default for Chip8Registers {
-    fn default() -> Self {
-        Chip8Registers {
-            v0: 0,
-            v1: 0,
-            v2: 0,
-            v3: 0,
-            v4: 0,
-            v5: 0,
-            v6: 0,
-            v7: 0,
-            v8: 0,
-            v9: 0,
-            va: 0,
-            vb: 0,
-            vc: 0,
-            vd: 0,
-            ve: 0,
-            vf: 0,
-            i: 0,
-            delay: 0,
-            sound: 0,
-            pc: 512,
-            sp: 0,
-        }
+impl From<u8> for Register8 {
+    fn from(value: u8) -> Register8 {
+        Register8(value)
     }
 }
 
-impl Chip8Registers {
-    pub fn get(&self, register: Register) -> u8 {
-        match register {
-            Register::V0 => self.v0,
-            Register::V1 => self.v1,
-            Register::V2 => self.v2,
-            Register::V3 => self.v3,
-            Register::V4 => self.v4,
-            Register::V5 => self.v5,
-            Register::V6 => self.v6,
-            Register::V7 => self.v7,
-            Register::V8 => self.v8,
-            Register::V9 => self.v9,
-            Register::VA => self.va,
-            Register::VB => self.vb,
-            Register::VC => self.vc,
-            Register::VD => self.vd,
-            Register::VE => self.ve,
-            Register::VF => self.vf,
-        }
-    }
+#[derive(Clone, Copy, Debug)]
+struct Register16(u16);
 
-    pub fn get_mut(&mut self, register: Register) -> &mut u8 {
-        match register {
-            Register::V0 => &mut self.v0,
-            Register::V1 => &mut self.v1,
-            Register::V2 => &mut self.v2,
-            Register::V3 => &mut self.v3,
-            Register::V4 => &mut self.v4,
-            Register::V5 => &mut self.v5,
-            Register::V6 => &mut self.v6,
-            Register::V7 => &mut self.v7,
-            Register::V8 => &mut self.v8,
-            Register::V9 => &mut self.v9,
-            Register::VA => &mut self.va,
-            Register::VB => &mut self.vb,
-            Register::VC => &mut self.vc,
-            Register::VD => &mut self.vd,
-            Register::VE => &mut self.ve,
-            Register::VF => &mut self.vf,
-        }
+impl From<u16> for Register16 {
+    fn from(value: u16) -> Register16 {
+        Register16(value)
     }
 }
 
-#[derive(Clone, Copy, PartialEq, Debug)]
-pub enum Register {
-    V0,
-    V1,
-    V2,
-    V3,
-    V4,
-    V5,
-    V6,
-    V7,
-    V8,
-    V9,
-    VA,
-    VB,
-    VC,
-    VD,
-    VE,
-    VF,
+#[derive(Clone, Copy, Debug)]
+pub struct Registers {
+    pub general: [Register8; 16],
+    pub delay: Register8,
+    pub sound: Register8,
+    pub i: Register16,
+    pub pc: Register16,
 }
 
-impl Register {
-    pub fn new(value: u8) -> Register {
-        match value {
-            0 => Register::V0,
-            1 => Register::V1,
-            2 => Register::V2,
-            3 => Register::V3,
-            4 => Register::V4,
-            5 => Register::V5,
-            6 => Register::V6,
-            7 => Register::V7,
-            8 => Register::V8,
-            9 => Register::V9,
-            10 => Register::VA,
-            11 => Register::VB,
-            12 => Register::VC,
-            13 => Register::VD,
-            14 => Register::VE,
-            15 => Register::VF,
-            _ => panic!(format!("Cannot create Register from value {}", value)),
+impl Registers {
+    pub fn new() -> Registers {
+        Registers {
+            general: [0.into(); 16],
+            delay: 0.into(),
+            sound: 0.into(),
+            i: 0.into(),
+            pc: 512.into(),
         }
     }
 }
